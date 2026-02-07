@@ -1,0 +1,162 @@
+#!/usr/bin/env bun
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import { spawn } from "child_process";
+import path from "node:path";
+import fs from "node:fs";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/**
+ * MCP Server for local Speech-to-Text using whisper.cpp
+ */
+
+const WHISPER_PATH = path.join(__dirname, "..", "whisper.cpp", "main");
+const MODELS_DIR = path.join(__dirname, "..", "whisper.cpp", "models");
+
+const server = new Server(
+  {
+    name: "whisper-stt",
+    version: "1.0.0",
+  },
+  {
+    capabilities: {
+      tools: {},
+    },
+  },
+);
+
+/**
+ * Tool definition for transcription
+ */
+server.setRequestHandler(ListToolsRequestSchema, async () => {
+  return {
+    tools: [
+      {
+        name: "transcribe",
+        description: "Transcribe an audio file to text using local Whisper.cpp",
+        inputSchema: {
+          type: "object",
+          properties: {
+            filePath: {
+              type: "string",
+              description:
+                "Absolute path to the audio file (WAV format, 16kHz recommended)",
+            },
+            model: {
+              type: "string",
+              description:
+                "Whisper model to use (e.g., 'base', 'small', 'medium'). Defaults to WHISPER_MODEL env or 'base'.",
+            },
+            language: {
+              type: "string",
+              description:
+                "Language code for the audio (e.g., 'en', 'fr'). Use 'auto' for auto-detection.",
+              default: "fr",
+            },
+          },
+          required: ["filePath"],
+        },
+      },
+    ],
+  };
+});
+
+/**
+ * Tool execution handler
+ */
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  if (request.params.name !== "transcribe") {
+    throw new Error("Tool not found");
+  }
+
+  const {
+    filePath,
+    language = "en",
+    model: requestedModel,
+  } = request.params.arguments as {
+    filePath: string;
+    language?: string;
+    model?: string;
+  };
+
+  if (!fs.existsSync(filePath)) {
+    return {
+      content: [{ type: "text", text: `Error: File not found at ${filePath}` }],
+      isError: true,
+    };
+  }
+
+  // Determine model path
+  const model = requestedModel || process.env.WHISPER_MODEL || "base";
+  const modelName = `ggml-${model}.bin`;
+  const modelPath = path.join(MODELS_DIR, modelName);
+
+  if (!fs.existsSync(modelPath)) {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Error: Model '${model}' not found at ${modelPath}. Please run install.sh to download it.`,
+        },
+      ],
+      isError: true,
+    };
+  }
+
+  return new Promise((resolve) => {
+    // whisper.cpp requires 16kHz WAV files.
+    const args = ["-m", modelPath, "-f", filePath, "-nt"];
+    if (language && language !== "auto") {
+      args.push("-l", language);
+    }
+
+    const child = spawn(WHISPER_PATH, args);
+
+    let stdout = "";
+    let stderr = "";
+
+    child.stdout.on("data", (data) => {
+      stdout += data.toString();
+    });
+
+    child.stderr.on("data", (data) => {
+      stderr += data.toString();
+    });
+
+    child.on("close", (code) => {
+      if (code !== 0) {
+        resolve({
+          content: [{ type: "text", text: `Whisper error: ${stderr}` }],
+          isError: true,
+        });
+      } else {
+        // whisper.cpp output often contains timestamps or metadata if not handled
+        const cleanedText = stdout.trim();
+        resolve({
+          content: [{ type: "text", text: cleanedText }],
+        });
+      }
+    });
+  });
+});
+
+/**
+ * Start the server using stdio transport
+ */
+async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error("Whisper STT MCP Server running on stdio");
+}
+
+main().catch((error) => {
+  console.error("Fatal error in main():", error);
+  process.exit(1);
+});
