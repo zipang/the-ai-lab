@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "whisper-stt": {
+      "command": "whisper-stt",
+      "env": {
+        "WHISPER_MODEL": "base"
+      }
+    }
+  }
+}
