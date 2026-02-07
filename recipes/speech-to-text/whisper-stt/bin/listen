@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Configuration
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+WHISPER_CLI="$BASE_DIR/whisper.cpp/build/bin/whisper-cli"
+MODEL_PATH="$BASE_DIR/whisper.cpp/models/ggml-base.bin"
+
+# Temporary file
+OUTPUT_FILE="/tmp/voice_input_$(date +%s).wav"
+
+# Check dependencies
+if ! command -v ffmpeg &> /dev/null; then
+    echo "Error: ffmpeg is not installed." >&2
+    exit 1
+fi
+
+# 1. Recording Logic
+if [ -t 0 ] && [ -z "$1" ]; then
+    # Interactive mode (Terminal)
+    echo "Press ENTER to START recording..." >&2
+    read -r
+    
+    ffmpeg -y -f alsa -i default -ar 16000 -ac 1 -c:a pcm_s16le "$OUTPUT_FILE" > /dev/null 2>&1 &
+    FFMPEG_PID=$!
+    
+    echo "Recording... Press ENTER to STOP." >&2
+    read -r
+    
+    kill -2 $FFMPEG_PID
+    wait $FFMPEG_PID 2>/dev/null
+else
+    # Non-interactive mode or duration provided
+    DURATION=${1:-10}
+    echo "Non-interactive mode: Recording for $DURATION seconds..." >&2
+    ffmpeg -y -f alsa -i default -ar 16000 -ac 1 -c:a pcm_s16le -t "$DURATION" "$OUTPUT_FILE" > /dev/null 2>&1
+fi
+
+# 2. Transcription Logic
+if [ -f "$OUTPUT_FILE" ]; then
+    # Run Whisper
+    "$WHISPER_CLI" -m "$MODEL_PATH" -f "$OUTPUT_FILE" -nt -l auto 2>/dev/null | \
+        grep -vE "^(whisper_|system_info|main:|$) " | \
+        grep -vE "^\s*$"
+    
+    # Cleanup
+    rm "$OUTPUT_FILE"
+else
+    echo "Error: Failed to create recording." >&2
+    exit 1
+fi
