@@ -1,0 +1,13 @@
+{
+  "name": "mcp-server-template",
+  "version": "1.0.0",
+  "description": "Minimal MCP server template using Bun and TypeScript",
+  "type": "module",
+  "scripts": {
+    "start": "bun src/index.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "latest",
+    "zod": "latest"
+  }
+}
