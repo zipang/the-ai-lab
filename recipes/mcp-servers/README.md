@@ -18,36 +18,61 @@ bun add @modelcontextprotocol/sdk
 
 ### 2. Implementation Template (`index.ts`)
 
-This template uses the latest `@modelcontextprotocol/sdk` to create a stdio-based server.
+This template demonstrates all three MCP primitives: **Tools**, **Resources**, and **Prompts**.
 
 ```typescript
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-// 1. Initialize the server
 const server = new McpServer({
-  name: "my-local-tool",
+  name: "my-local-manager",
   version: "1.0.0",
 });
 
-// 2. Register a tool
+// --- 1. TOOLS (Actions) ---
 server.tool(
   "calculate_bmi",
-  "Calculate Body Mass Index (BMI)",
+  "Calculate Body Mass Index",
   {
-    weightKg: z.number().describe("Weight in kilograms"),
+    weightKg: z.number().describe("Weight in kg"),
     heightM: z.number().describe("Height in meters"),
   },
-  async ({ weightKg, heightM }) => {
-    const bmi = weightKg / (heightM * heightM);
-    return {
-      content: [{ type: "text", text: `Your BMI is ${bmi.toFixed(2)}` }],
-    };
-  }
+  async ({ weightKg, heightM }) => ({
+    content: [{ type: "text", text: `BMI: ${(weightKg / (heightM * heightM)).toFixed(2)}` }],
+  })
 );
 
-// 3. Start the server with stdio transport
+// --- 2. RESOURCES (Data) ---
+// Expose a virtual file or data stream
+server.resource(
+  "project-info",
+  "memo://project/readme",
+  async (uri) => ({
+    contents: [{
+      uri: uri.href,
+      text: "This is a local project managed by Bun and MCP.",
+      mimeType: "text/plain"
+    }]
+  })
+);
+
+// --- 3. PROMPTS (Templates) ---
+server.prompt(
+  "review-code",
+  { language: z.string().describe("The programming language") },
+  ({ language }) => ({
+    messages: [{
+      role: "user",
+      content: {
+        type: "text",
+        text: `Please review this ${language} code for security best practices and efficiency.`
+      }
+    }]
+  })
+);
+
+// --- START SERVER ---
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
@@ -55,7 +80,7 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error("Fatal error in main():", error);
+  console.error("Fatal error:", error);
   process.exit(1);
 });
 ```
