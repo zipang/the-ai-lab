@@ -31,9 +31,24 @@ MCP servers expose capabilities through three core primitives:
 
 | Primitive | Description | Practical Example |
 | :--- | :--- | :--- |
-| **Tools** | Executable functions the LLM can call (requires user approval). | `calculate_bmi(w, h)`, `send_email(to, body)` |
-| **Resources** | Data identified by URIs that the AI can retrieve. | `file:///logs/app.log`, `db://schema/users` |
-| **Prompts** | Pre-written templates guiding the user or LLM. | `code-reviewer`, `sql-query-generator` |
+| **Tools** | Executable functions the LLM can call (requires user approval). | `create_task(title, priority)`, `search_docs(query)` |
+| **Resources** | Data identified by URIs that the AI can retrieve. | `tasks://backlog`, `file:///logs/app.log` |
+| **Prompts** | Pre-written templates guiding the user or LLM. | `task-planner-assistant`, `error-debugger` |
+
+### Deep Dive: Practical Use Cases for Prompts
+Prompts are often misunderstood as simple "chat templates," but in MCP, they serve critical functional roles:
+
+1. **Parameter Elicitation (Tool Assistants):**
+   If a tool has complex requirements (e.g., a Jira ticket creator needing priority, component, labels, and description), a Prompt can guide the user to provide all necessary details in one go, ensuring the subsequent Tool call succeeds.
+   *Example:* A `new-feature-request` prompt that asks the user: "What is the feature name, the target audience, and the technical requirements?"
+
+2. **Contextual Scaffolding:**
+   Prompts can pre-load specific **Resources** into the conversation.
+   *Example:* A `debug-logs` prompt that automatically fetches the last 50 lines of `file:///var/log/app.log` and asks the LLM to find the root cause.
+
+3. **Standardizing Workflows:**
+   Ensuring that the LLM follows a specific methodology for certain tasks.
+   *Example:* A `sprint-retro` prompt that structures the response into "What went well," "What didn't," and "Action items."
 
 ## Common Use Cases
 - **Data Retrieval:** Injecting real-time context from cloud storage or knowledge bases.
