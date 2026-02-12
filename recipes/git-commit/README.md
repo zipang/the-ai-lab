@@ -41,6 +41,8 @@ Add the following rule to your project's `AGENTS.md` or `.opencode/instructions.
 
 ### 3. Usage
 Once installed, the user will be able to trigger the git commit workflow by :
-- Using the `/commit` command
-- Prompt something like "Commit my changes" or  "Commit the changes in src/main.js"
+- Using the `/commit` command (e.g., `/commit "update documentation"`)
+- Prompt something like "Commit my changes" or "Commit the changes in src/main.js"
+
+The command accepts an optional parameter to help the agent identify which files to stage and provide context for the commit message.
 

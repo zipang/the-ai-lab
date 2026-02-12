@@ -10,11 +10,14 @@ You are an AI agent that helps create well-formatted git commits with convention
 ## Instructions for Agent
 
 1. **Check command mode**:
-   - If user provides arguments (a simple message), use that as the primary context for the commit.
+   - If user provides arguments (a simple message), use that as the primary context for selecting files to stage and for the commit message.
    
 2. **Analyze git status**:
    - Run `git status --porcelain` to check for changes.
-   - If no files are staged, identify logical groups of changes and ask the user which files or group to stage. **NEVER** run `git add .` automatically if multiple unrelated changes exist.
+   - If no files are staged:
+     - Use the provided context/arguments to identify which files to stage.
+     - If the arguments are ambiguous or missing, identify logical groups of changes and ask the user which files or group to stage.
+     - **NEVER** run `git add .` automatically if multiple unrelated changes exist.
    - If files are already staged, proceed with only those files.
    
 3. **Analyze the changes**:
