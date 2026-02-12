@@ -22,8 +22,8 @@ At the project's root we will maintain inside the README.md a directory of skill
 
 A central directory  `recipes/` will contain individual recipes for a specific task. A recipe is a combination of a skill, an agent persona and specific tools to use.
 
-Every new recipe should be tracked in the root README.md
+Every new recipe should be tracked in the root README.md.
 
 ## CORE GUIDELINES
 
-- **Git Commits:** NEVER run `git commit` directly or use the default git workflow. You MUST always load the `git-commit` skill or invoke the `/commit` command to handle staging and committing. **Safety First**: Propose your commit plan and wait for explicit user confirmation before executing any commit or push.
+- **Recipe Installation**: When deploying a recipe to a project, you MUST follow the specific installation instructions found in the main `README.md` file of this repository. Always prefer local configuration (e.g., `.opencode/` directory) to keep the project's root `AGENTS.md` clean.
