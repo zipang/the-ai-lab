@@ -21,7 +21,7 @@ When this skill is used, execute the following workflow:
    
 2. **Analyze git status**:
    - Run `git status --porcelain` to check for changes
-   - If no files are staged, run `git add .` to stage all modified files
+   - If no files are staged, identify logical groups of changes and ask the user what to stage. NEVER run `git add .` automatically.
    - If files are already staged, proceed with only those files
    
 3. **Analyze the changes**:
@@ -155,7 +155,7 @@ Example commit sequence:
 ## Agent Behavior Notes
 
 - **Error handling**: If validation fails, give user option to proceed or fix issues first  
-- **Auto-staging**: If no files are staged, automatically stage all changes with `git add .`
+- **Auto-staging**: DO NOT automatically stage changes. Always ask the user to confirm which files or logical groups to stage if nothing is staged.
 - **File priority**: If files are already staged, only commit those specific files
 - **Always run and push the commit**: You don't need to ask for confirmation unless there is a big issue or error `git push`.
 - **Message quality**: Ensure commit messages are clear, concise, and follow conventional format

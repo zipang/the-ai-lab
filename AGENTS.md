@@ -21,3 +21,5 @@ This repository will contain multiple folders each dedicated to a specific user 
 At the project's root we will maintain inside the README.md a directory of skills and MCP servers configuration recipes, ready to use inside a specific project.
 
 A central directory  `recipes/` will contain individual recipes for a specific task. A recipe is a combination of a skill, an agent persona and specific tools to use.
+
+Every new recipe should be tracked in the root README.md
