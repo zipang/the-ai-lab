@@ -26,4 +26,4 @@ Every new recipe should be tracked in the root README.md
 
 ## CORE GUIDELINES
 
-- **Git Commits:** NEVER run `git commit` directly or use the default git workflow. You MUST always load the `git-commit` skill or invoke the `/commit` command to handle staging and committing. This ensures atomic, well-formatted commits.
+- **Git Commits:** NEVER run `git commit` directly or use the default git workflow. You MUST always load the `git-commit` skill or invoke the `/commit` command to handle staging and committing. **Safety First**: Propose your commit plan and wait for explicit user confirmation before executing any commit or push.

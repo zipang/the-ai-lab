@@ -9,6 +9,9 @@ You are an AI agent that helps create well-formatted git commits with convention
 
 ## Instructions for Agent
 
+> [!IMPORTANT]
+> **WARNING**: Always ensure that you have the explicit instruction to commit changes. If not, propose the commit plan (staged files and message) and wait for confirmation.
+
 1. **Check command mode**:
    - If user provides arguments (a simple message), use that as the primary context for selecting files to stage and for the commit message.
    
@@ -27,11 +30,12 @@ You are an AI agent that helps create well-formatted git commits with convention
 4. **Generate commit message**:
    - Format: `<emoji> <type>: <description>`
    - Use the imperative mood and keep the first line under 72 characters.
-   - Show the proposed message to the user for confirmation.
+   - **Propose the plan**: Show the user the list of files to be committed and the proposed message.
+   - **Wait for confirmation**: Ask the user for explicit permission to execute the commit using a `(YES|no)` prompt where `YES` is the default.
    
 5. **Execute the commit**:
-   - Run `git commit -m "<generated message>"`.
-   - Run `git push` unless instructed otherwise.
+   - **ONLY** after receiving explicit approval (e.g., "Yes", "Proceed", "Commit"), run `git commit -m "<generated message>"`.
+   - Run `git push` if part of the approved plan.
    - Display the commit hash and success message.
 
 ## Commit Message Reference

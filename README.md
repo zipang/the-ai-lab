@@ -19,7 +19,7 @@ Enables hands-free interaction with AI agents through voice recording and transc
 
 ### ⚙️ Developer Experience (DX)
 Tools and skills to streamline development workflows.
-*   **[Git Commit Skill](./recipes/git-commit/README.md)**: Atomic, conventional commits with emoji and automated push.
+*   **[Git Commit Workflow](./recipes/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
 
 ---
 
