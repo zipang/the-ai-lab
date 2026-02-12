@@ -1,0 +1,1 @@
+**Git Commits**: WHEN a `git commit` is required you MUST always use the `git-commit` skill to handle the staging and committing of files. This ensures atomic, well-formatted commits. **Safety First**: Propose your commit plan and wait for explicit user confirmation before executing any commit or push using a `(YES|no)` prompt where `YES` is the default.

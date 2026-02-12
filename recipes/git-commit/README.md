@@ -32,11 +32,23 @@ cp SKILL.md .opencode/skills/git-commit/SKILL.md
 cp commit.md .opencode/commands/commit.md
 ```
 
-### 2. Mandatory Usage Rule
-Add the following rule to your project's `AGENTS.md` or `.opencode/instructions.md` to ensure the agent always uses the skill:
+### 2. Configure Custom Instructions
 
+To ensure the agent always uses this workflow, add the rule to `.opencode/instructions.md` and register it in `opencode.json`.
+
+**Create/Update `.opencode/instructions.md`:**
 ```markdown
-**Git Commits**: WHEN a `git commit` is required you MUST always use the `git-commit` skill to handle the staging and committing of files. This ensures atomic, well-formatted commits.
+**Git Commits**: WHEN a `git commit` is required you MUST always use the `git-commit` skill to handle the staging and committing of files. This ensures atomic, well-formatted commits. **Safety First**: Propose your commit plan and wait for explicit user confirmation before executing any commit or push using a `(YES|no)` prompt where `YES` is the default.
+```
+
+**Register in `opencode.json` (at the project root):**
+If `opencode.json` doesn't exist, create it. Add `.opencode/instructions.md` to the `instructions` array:
+```json
+{
+  "instructions": [
+    ".opencode/instructions.md"
+  ]
+}
 ```
 
 ### 3. Usage
