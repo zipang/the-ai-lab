@@ -17,6 +17,10 @@ Templates and instructions for creating local Model Context Protocol (MCP) serve
 Enables hands-free interaction with AI agents through voice recording and transcription.
 *   **[Whisper STT](./recipes/speech-to-text/README.md)**: 100% local, privacy-focused speech-to-text using `whisper.cpp`.
 
+### ⚙️ Developer Experience (DX)
+Tools and skills to streamline development workflows.
+*   **[Git Commit Skill](./recipes/git-commit/README.md)**: Atomic, conventional commits with emoji and automated push.
+
 ---
 
 ## Project Organization
