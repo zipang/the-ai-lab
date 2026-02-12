@@ -1,0 +1,97 @@
+#!/bin/bash
+
+# Configuration
+REAL_SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
+BASE_DIR="$(cd "$(dirname "$REAL_SCRIPT_PATH")/.." && pwd)"
+
+# Load .env if exists
+if [ -f "$BASE_DIR/.env" ]; then
+    export $(grep -v '^#' "$BASE_DIR/.env" | xargs)
+fi
+
+WHISPER_CLI="$BASE_DIR/whisper.cpp/whisper-cli"
+
+# Hierarchy: Command line > Env > .env/Default
+SELECTED_MODEL=${1:-${WHISPER_MODEL:-base}}
+MODEL_PATH="$BASE_DIR/whisper.cpp/models/ggml-$SELECTED_MODEL.bin"
+AUDIO_DRIVER=${WHISPER_AUDIO_DRIVER:-alsa}
+INPUT_LANG=${2:-${WHISPER_INPUT:-auto}}
+OUTPUT_LANG=${3:-${WHISPER_OUTPUT:-$INPUT_LANG}}
+
+# Translation logic
+TR_FLAG=""
+if [[ "$OUTPUT_LANG" == "en" && "$INPUT_LANG" != "en" ]]; then
+    TR_FLAG="-tr"
+fi
+
+# Cleanup logic
+cleanup() {
+    if [ -n "$FFMPEG_PID" ]; then
+        kill -TERM "$FFMPEG_PID" 2>/dev/null
+        wait "$FFMPEG_PID" 2>/dev/null
+        FFMPEG_PID=""
+    fi
+}
+trap cleanup SIGINT SIGTERM EXIT
+
+# Ensure the binary exists
+if [ ! -f "$WHISPER_CLI" ]; then
+    # Fallback to build dir if not copied to root
+    WHISPER_CLI="$BASE_DIR/whisper.cpp/build/bin/whisper-cli"
+fi
+
+# Temporary file
+WAV_RECORDING="/tmp/voice_input_$(date +%s).wav"
+
+# Transcription Command
+WHISPER_ARGS="-m \"$MODEL_PATH\" -f \"$WAV_RECORDING\" -nt -l \"$INPUT_LANG\" $TR_FLAG"
+
+# Check dependencies
+if ! command -v ffmpeg &> /dev/null; then
+    echo "Error: ffmpeg is not installed." >&2
+    exit 1
+fi
+
+# 1. Recording Logic
+# Interactive mode (Terminal)
+echo "Using model: $SELECTED_MODEL" >&2
+echo "Using audio driver: $AUDIO_DRIVER" >&2
+echo "Using input language: $INPUT_LANG" >&2
+if [ -n "$TR_FLAG" ]; then
+    echo "Translating to English..." >&2
+fi
+echo "Press ENTER to START recording..." >&2
+read -r
+
+ffmpeg -y -f "$AUDIO_DRIVER" -i default -ar 16000 -ac 1 -c:a pcm_s16le "$WAV_RECORDING" > /dev/null 2>&1 &
+FFMPEG_PID=$!
+
+echo "Recording... Press ENTER to STOP." >&2
+read -r
+
+cleanup
+echo "Transcribing... please wait." >&2
+
+# 2. Transcription Logic
+if [ -f "$WAV_RECORDING" ]; then
+    # Show the command being executed
+    echo "Executing: $WHISPER_CLI $WHISPER_ARGS" >&2
+    echo "" >&2
+
+    # Run Whisper (errors to stderr, results to stdout)
+    # Note: We use eval to handle the quoted arguments in WHISPER_ARGS correctly
+    eval "\"$WHISPER_CLI\" $WHISPER_ARGS" 2>/tmp/whisper_error.log | \
+        grep -vE "^(whisper_|system_info|main:|$) " | \
+        grep -vE "^\s*$"
+
+    # If output is empty and there was an error, show it
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
+        cat /tmp/whisper_error.log >&2
+    fi
+
+    # Cleanup temporary file
+    # rm -f "$WAV_RECORDING"
+else
+    echo "Error: Failed to create recording." >&2
+    exit 1
+fi

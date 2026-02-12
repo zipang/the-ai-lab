@@ -1,25 +1,21 @@
-# LOCAL MCP SERVERS
-
-This recipe provides a template and instructions for creating *local* MCP servers using **Bun** and **TypeScript**. 
-
-Local MCP servers are ideal for keeping private data private and ensuring fast, low-latency interactions with your local tools and filesystem.
+# A template for local MCP servers with bun
 
 ## Prerequisites
 
 - [Bun](https://bun.sh/) installed on your machine.
 - An MCP host (like Opencode, Claude Desktop, or Claude Code).
 
-## Using the Template
+## Using the Typescript Template
 
-We provide a minimal, production-ready template in the `template/` directory that demonstrates all three MCP primitives: **Tools**, **Resources**, and **Prompts**.
+This directory provides a minimal template to bootstrap a custom MCP server written in Typescript that demonstrates all three MCP primitives: **Tools**, **Resources**, and **Prompts**.
 
 ### 1. Scaffold your server
 
-Copy the template to your desired project location:
+Copy the content of this directory to a new location (ask the user for the location of his choice):
 
 ```bash
-cp -r recipes/mcp-servers/template ~/my-new-mcp-server
-cd ~/my-new-mcp-server
+cp -r recipes/local-mcp-servers/bun-template path/to/my-new-mcp-server
+cd path/to/my-new-mcp-server
 bun install
 ```
 
@@ -36,7 +32,7 @@ To use your local server with an AI client, add it to your configuration file (e
   "mcpServers": {
     "my-local-server": {
       "command": "bun",
-      "args": ["run", "/absolute/path/to/my-new-mcp-server/src/index.ts"]
+      "args": ["run", "/path/to/my-new-mcp-server/src/index.ts"]
     }
   }
 }
@@ -47,7 +43,3 @@ To use your local server with an AI client, add it to your configuration file (e
 - **Zero Config TypeScript:** No compilation step required; run `.ts` files directly.
 - **Fast Startup:** Instantaneous execution, perfect for agentic workflows.
 - **Modern Standards:** Built-in support for ESM, top-level await, and web APIs.
-
-## Research & Best Practices
-
-For a deeper dive into architecture, use cases, and best practices, see [research.md](./research.md).

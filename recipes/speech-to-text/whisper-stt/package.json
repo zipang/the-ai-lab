@@ -4,7 +4,9 @@
   "description": "Local STT MCP server using whisper.cpp and Bun",
   "type": "module",
   "bin": {
-    "whisper-stt": "./bin/whisper-stt"
+    "whisper-stt": "./bin/whisper-stt",
+    "listen-stt": "./bin/listen-stt",
+    "dictate": "./bin/dictate.ts"
   },
   "scripts": {
     "start": "bun ./bin/whisper-stt.ts",

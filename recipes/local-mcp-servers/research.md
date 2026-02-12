@@ -4,27 +4,24 @@
 While LLMs are proficient in reasoning and coding, they are often disconnected from real-world data (static datasets). Introduced by Anthropic in late 2024, the **Model Context Protocol (MCP)** is an open standard that connects AI applications to external systems, providing a secure and scalable way to communicate with data sources and tools.
 
 ## What is an MCP Server?
-An MCP Server acts as a standardized gateway between an AI application (Client) and external capabilities. It provides controlled access to data or specialized tasks, decoupling the AI's core logic from implementation details.
+An MCP Server acts as a standardized gateway between an AI application (the MCP Client) and external capabilities. It provides controlled access to data or specialized tasks, decoupling the AI's core logic from implementation details.
 
 ## Technical Principles & Architecture
-The architecture follows a client-server-host model using **JSON-RPC 2.0**:
+The architecture follows a client-server-host model using **JSON-RPC 2.0** messages:
 - **MCP Host:** The main AI application (e.g., Opencode, Claude Code).
 - **MCP Client:** The bridge within the host maintaining a one-to-one connection with a server.
 - **MCP Server:** The program exposing tools and data.
 
 ### Transports
-- **Local:** Uses standard input/output (**stdio**) pipes.
-- **Remote:** Uses HTTP with **Server-Sent Events (SSE)** for streaming.
+- **stdio:** for local communication uses standard input/output (`stdin/stdout`) pipes.
+- **Streamable HTTP transport:** for communication with remote server uses HTTP POST with **Server-Sent Events (SSE)** for streaming.
 
-```mermaid
-graph LR
-    subgraph "MCP Host (e.g., Opencode)"
-        Client[MCP Client]
-    end
-    Server[MCP Server]
-    Client <-->|Standard Protocol| Server
-    Server <-->|Native Integration| Data[External Data/Tools]
-```
+## Common Use Cases
+- **Data Retrieval:** Injecting real-time context from cloud storage or knowledge bases.
+- **Automation:** Enabling agents to execute tools (e.g., CRM updates, calendar events).
+- **Local Access:** Providing secure, sandboxed access to local files and directories.
+- **Web/API Integration:** Wrapping REST APIs in a consistent interface.
+- **Collaboration:** Orchestrating multi-agent workflows.
 
 ## Core Primitives: Tools, Resources, and Prompts
 MCP servers expose capabilities through three core primitives:
@@ -49,13 +46,6 @@ Prompts are often misunderstood as simple "chat templates," but in MCP, they ser
 3. **Standardizing Workflows:**
    Ensuring that the LLM follows a specific methodology for certain tasks.
    *Example:* A `sprint-retro` prompt that structures the response into "What went well," "What didn't," and "Action items."
-
-## Common Use Cases
-- **Data Retrieval:** Injecting real-time context from cloud storage or knowledge bases.
-- **Automation:** Enabling agents to execute tools (e.g., CRM updates, calendar events).
-- **Local Access:** Providing secure, sandboxed access to local files and directories.
-- **Web/API Integration:** Wrapping REST APIs in a consistent interface.
-- **Collaboration:** Orchestrating multi-agent workflows.
 
 ## Advanced Features
 - **Sampling:** Servers can ask the AI model to generate content during a workflow.
