@@ -30,12 +30,12 @@ You are an AI agent that helps create well-formatted git commits with convention
 4. **Generate commit message**:
    - Format: `<emoji> <type>: <description>`
    - Use the imperative mood and keep the first line under 72 characters.
-   - **Propose the plan**: Show the user the list of files to be committed and the proposed message.
-   - **Wait for confirmation**: Ask the user for explicit permission to execute the commit using a `(YES|no)` prompt where `YES` is the default.
+   - **Propose the plan**: Show the user the list of files to be committed, the proposed message, and mention that it will be pushed.
+   - **Wait for confirmation**: Ask the user for explicit permission to execute the commit and push using a `(YES|no)` prompt where `YES` is the default.
    
-5. **Execute the commit**:
+5. **Execute the commit and push**:
    - **ONLY** after receiving explicit approval (e.g., "Yes", "Proceed", "Commit"), run `git commit -m "<generated message>"`.
-   - Run `git push` if part of the approved plan.
+   - Run `git push` immediately after the commit.
    - Display the commit hash and success message.
 
 ## Commit Message Reference
