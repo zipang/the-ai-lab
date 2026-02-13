@@ -11,10 +11,10 @@ The Librarian is a specialized agent and workflow designed to be the "keeper of 
 
 ## Locally Indexed Documentation
 
-| Tool     | Status     | Entry Point               |
-| :---     | :---       | :---                      |
-| Bun      | ✅ Indexed  | `/docs/bun/index.md`      |
-| OpenCode | ⏳ Pending | `/docs/opencode/index.md` |
+| Tool     | Status    | Entry Point                       |
+| :------- | :-------- | :-------------------------------- |
+| Bun      | ✅ Indexed | `/docs/bun - v1.3.9/index.md`      |
+| OpenCode | ✅ Indexed | `/docs/opencode - v1.1.65/index.md`|
 
 ## Installation
 

@@ -26,6 +26,8 @@ When the tool name and version is confirmed it is time to find a way to download
 
 **CRITICAL RULE**: You must preserve the original text exactly. Do not truncate, do not "clean up" the structure, and do not summarize. The goal is a perfect local mirror.
 
+**VERIFICATION RULE**: Before indexing, you MUST verify that the fetched content is valid. If a file contains JSON error messages (e.g., `{"status":404...}`), HTML error pages, or is significantly smaller than expected (e.g., < 100 bytes for a documentation chapter), it MUST be rejected and the acquisition strategy must be adjusted.
+
 There are several strategies to try : 
 * Find an `llms.txt` or `llms-full.txt` file. These are specifically for you. Use the `Bash` tool with `curl` to download the linked `.md` files directly. This is much faster and more accurate than `webfetch` for raw Markdown.
 * Find the git repository containing the official documentation. Downloading the raw `.md` files from the source (e.g., GitHub raw URLs) is the preferred shortcut.
@@ -43,7 +45,8 @@ Create the following structure at the root of the project :
       ├── configuration.md# Chapter
       └── ...
 ```
-Each individual markdown file (a chapter or page) should be indexed inside the entry point for all the documentation content : `index.md` 
+
+**ENRICHMENT RULE**: When creating or updating the `index.md` entry point, you MUST include a brief, one-sentence description for each indexed chapter (e.g., `- [Agents](./agents.md): Configure and use specialized agents.`). Read the first few lines or the frontmatter of each file to extract its primary purpose. DON'T self-reference `index.md` file. This ensures other agents can quickly identify the correct documentation file for a specific query.
 
 ### Advertise
 It's time to tell the other agents that there is a newly available documentation. For this you must keep up-to-date global instructions inside the project (in `.opencode/instructions.md`) : (use the actual docs/ content and provide a description of what the tool is)
@@ -51,5 +54,5 @@ It's time to tell the other agents that there is a newly available documentation
 ```markdown
 **LOCAL DOCUMENTATION FOR TOOLS**: The following tools/libraries have been locally indexed for reference:
 - [${toolName}](./docs/${toolName}%20-%20${toolVersion}/index.md) ${toolDescription}
-Anytime you must generate code or instructions to use these tools in the project, you **MUST** refer to the local documentation first. This will ensure efficiency, low latency, and conformance to the version of the tool actually used inside the project.
+Anytime you must generate code or instructions to use these tools in the project, you **MUST** refer to this local documentation first. This will ensure efficiency, low latency, and conformance to the version of the tool actually used inside the project. Preload the `index.md` content of each available documentation to keep this in your context for rapid access.
 ```
