@@ -10,12 +10,13 @@ This section tracks all available recipes within the `recipes/` directory. A rec
 
 ### 🛠️ Local MCP Servers
 Templates and instructions for creating local Model Context Protocol (MCP) servers.
-*   **[Bun & TypeScript Template](./recipes/local-mcp-servers/README.md)**: Quick-start template for building local MCP servers with Bun.
-*   **[Rust Filesystem MCP](./recipes/local-mcp-servers/README.md)**: A high-performance Rust implementation for filesystem operations.
+*   **[Bun & TypeScript Template](./recipes/local-mcp-servers/bun-template/README.md)**: Quick-start template for building local MCP servers with Bun.
+*   **[Rust Filesystem MCP](./recipes/local-mcp-servers/rust-mcp-filesystem/README.md)**: A high-performance Rust implementation for filesystem operations.
+*   **[MCP Inspector](./recipes/local-mcp-servers/mcp-inspector/README.md)**: Interactive debugger for testing and exploring MCP servers.
 
 ### 🎙️ Speech-to-Text (STT)
 Enables hands-free interaction with AI agents through voice recording and transcription.
-*   **[Whisper STT](./recipes/speech-to-text/README.md)**: 100% local, privacy-focused speech-to-text using `whisper.cpp`.
+*   **[Whisper STT](./recipes/speech-to-text/whisper-stt/README.md)**: 100% local, privacy-focused speech-to-text using `whisper.cpp`.
 
 ### ⚙️ Developer Experience (DX)
 Tools and skills to streamline development workflows.

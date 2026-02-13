@@ -64,7 +64,13 @@ Prompts are often misunderstood as simple "chat templates," but in MCP, they ser
 3. **Write the Server (`index.ts`):**
    Use the `McpServer` class to register tools, resources, and prompts (see README.md for a full template).
 4. **Test & Run:**
-   Test by sending JSON-RPC messages to `stdin` or via a client like Claude Desktop.
+   The most efficient way to test is using the **MCP Inspector**. It allows you to trigger tools and inspect JSON-RPC traffic in a web UI.
+
+   ```bash
+   bunx @modelcontextprotocol/inspector bun run index.ts
+   ```
+
+   Alternatively, you can test by sending JSON-RPC messages to `stdin` or via a client like Claude Desktop.
 
 ## Best Practices
 ### Architectural & Security
