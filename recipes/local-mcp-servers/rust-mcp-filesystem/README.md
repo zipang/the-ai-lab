@@ -41,15 +41,15 @@ This script will prompt you for the installation directory (`~/.cargo/bin` or `~
 
 Then configure the agent to use this MCP server : 
 
-To enable the MCP to _read and write_ files in the current project insert these lines into the Opencode `config.json` (in the section mcpServers)
+To enable the MCP to _read and write_ files in the current project insert these lines into the Opencode `opencode.json` (in the section `mcp`)
 
 ```json
 {
-  "mcpServers": {
-    ...
+  "mcp": {
     "filesystem": {
-      "command": "rust-mcp-filesystem",
-      "args": [ "-w", "/replace/with/path/to/current/project" ]
+      "type": "local",
+      "command": ["rust-mcp-filesystem", "-w", "/replace/with/path/to/current/project"],
+      "enabled": true
     }
   }
 }
