@@ -20,6 +20,7 @@ logs/
 
 # IDEs and editors
 .vscode/
+.obsidian/
 
 # OS files
 .DS_Store
@@ -39,6 +40,9 @@ tmp/
 # Whisper artifacts
 recipes/speech-to-text/whisper-stt/whisper.cpp/
 *.wav
+
+# Local Documentation
+docs/
 
 # Keep this file tracked
 !.gitignore
