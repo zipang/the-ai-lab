@@ -1,8 +1,8 @@
-# Installing Variant: whisper-stt
+# Whisper Speech to Text
 
-This variant implements local Speech-to-Text using [Whisper.cpp](https://github.com/ggerganov/whisper.cpp).
+This recipe implements local Speech-to-Text using [Whisper.cpp](https://github.com/ggerganov/whisper.cpp).
 
-## 1. Technical Setup
+## Build
 
 Ensure you have the following installed on your system:
 - `bun`
@@ -17,23 +17,23 @@ chmod +x install.sh
 ./install.sh
 ```
 
-## 2. Agent Configuration
+## Installation
 
 To make the recipe available to the agent, update your configuration files.
 
 ### MCP Server Registration
-Add the following to your `.opencode/config.json`:
+Add the following to your `opencode.json`:
 
 ```json
 {
-  "mcpServers": {
+  "mcp": {
     "whisper-stt": {
-      "command": "whisper-stt",
-      "env": {
-        "WHISPER_MODEL": "base",
-        "WHISPER_INPUT": "auto",
-        "WHISPER_OUTPUT": "en"
-      }
+      "type": "local",
+      "command": ["whisper-stt"],
+      "environment": {
+        "WHISPER_MODEL": "base"
+      },
+      "enabled": true
     }
   }
 }
