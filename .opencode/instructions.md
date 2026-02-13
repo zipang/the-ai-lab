@@ -3,4 +3,4 @@
 **LOCAL DOCUMENTATION FOR TOOLS**: The following tools/libraries have been locally indexed for reference:
 - [Bun](./docs/bun%20-%20v1.3.9/index.md) Bun is an all-in-one toolkit for developing modern JavaScript/TypeScript applications.
 - [Opencode](./docs/opencode%20-%20v1.1.65/index.md) OpenCode is an open source AI coding agent for your terminal, IDE, or desktop.
-Anytime you must generate code or instructions to use these tools in the project, you **MUST** refer to the local documentation first. This will ensure efficiency, low latency, and conformance to the version of the tool actually used inside the project.
+Anytime you must generate code or instructions to use these tools in the project, you **MUST** refer to this local documentation first. This will ensure efficiency, low latency, and conformance to the version of the tool actually used inside the project. Preload the `index.md` content of each available documentation to keep this in your context for rapid access.
