@@ -15,15 +15,29 @@ homepage = "https://github.com/rust-mcp-stack/rust-mcp-filesystem"
 
 Original project README : https://github.com/rust-mcp-stack/rust-mcp-filesystem/blob/main/README.md
 
+## Prerequisites
+
+This project requires **Cargo** and the **Rust toolchain**. 
+
+You can install them via your package manager:
+- **Fedora/RHEL/CentOS**: `sudo dnf install cargo`
+- **Debian/Ubuntu**: `sudo apt install cargo`
+- **MacOS (Homebrew)**: `brew install rust`
+
+Alternatively, use the official **rustup** installer for the latest version:
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
 ## Installation
 
-To install the `rust-mcp-filesystem` binary run the appropriate install command found in the [README](https://github.com/rust-mcp-stack/rust-mcp-filesystem/blob/main/README.md) :
-
-For instance on linux system the command would be (if v0.4.0 is the latest release):
+To install the `rust-mcp-filesystem` binary, use the provided installation script which compiles the latest version from GitHub:
 
 ```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/rust-mcp-stack/rust-mcp-filesystem/releases/download/v0.4.0/rust-mcp-filesystem-installer.sh | sh
+./install.sh
 ```
+
+This script will prompt you for the installation directory (`~/.cargo/bin` or `~/.local/bin`) and verify your environment.
 
 Then configure the agent to use this MCP server : 
 
