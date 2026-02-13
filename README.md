@@ -1,10 +1,10 @@
 # RESEARCH LAB FOR AI AGENTS : TOOLS, SKILLS, TEMPLATES
 
-## The Mission
+## Project's Goals
 
 This repository is a laboratory for experimenting with tools, skills, and templates designed to enhance the experience of working with AI Agents (such as OpenCode, Claude Code, etc.). Our goal is to identify, test, and configure the optimal set of tools for specific tasks like coding, web development, research, and daily organization.
 
-## Directory of Recipes
+## Available Recipes
 
 This section tracks all available recipes within the `recipes/` directory. A recipe can contain skills, new agent persona, and specific tools exposed through MCP servers. The instructions to install a recipe are given in each README file at the root of each recipe directory variant.
 
@@ -18,9 +18,10 @@ Templates and instructions for creating local Model Context Protocol (MCP) serve
 Enables hands-free interaction with AI agents through voice recording and transcription.
 *   **[Whisper STT](./recipes/speech-to-text/whisper-stt/README.md)**: 100% local, privacy-focused speech-to-text using `whisper.cpp`.
 
-### ⚙️ Developer Experience (DX)
+### ⚙️ Developer Experience (DX) & Workflows
 Tools and skills to streamline development workflows.
-*   **[Git Commit Workflow](./recipes/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
+*   **[Git Commit Workflow](./recipes/workflows/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
+*   **[The Librarian](./recipes/workflows/the-librarian/README.md)**: Specialized sub-agent for local documentation indexing and management.
 
 ---
 
