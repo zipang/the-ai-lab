@@ -17,10 +17,16 @@ fi
 # Function to search HF
 search_hf() {
     local QUERY=$1
-    echo "Searching Hugging Face for '$QUERY' (Whisper ASR models)..."
-    # Search for whisper models without strict ggml filter, but limit to ASR
-    curl -s "https://huggingface.co/api/models?search=$QUERY&pipeline_tag=automatic-speech-recognition&limit=15" | \
-    jq -r '.[] | select(.id | contains("whisper")) | "\(.id) (Likes: \(.likes))"'
+    # Ensure "whisper" is part of the query if not already present
+    local SEARCH_QUERY="$QUERY"
+    if [[ ! "$QUERY" =~ "whisper" ]]; then
+        SEARCH_QUERY="whisper $QUERY"
+    fi
+
+    echo "Searching Hugging Face for '$SEARCH_QUERY' (Whisper ASR models)..."
+    # Search for whisper models, increase limit to 50 to find newer/specific models
+    curl -s "https://huggingface.co/api/models?search=$(echo $SEARCH_QUERY | sed 's/ /+/g')&pipeline_tag=automatic-speech-recognition&limit=50" | \
+    jq -r '.[] | select(.id | ascii_downcase | contains("whisper")) | "\(.id) (Likes: \(.likes))"'
 }
 
 # Function to list files in a repo
@@ -35,25 +41,27 @@ list_repo_files() {
 download_model() {
     local REPO=$1
     local FILENAME=$2
-    local TARGET_NAME=$3
-
-    if [ -z "$TARGET_NAME" ]; then
-        TARGET_NAME=$(echo "$FILENAME" | sed 's/\//_/g')
-    fi
+    local SUGGESTED_NAME=$(echo "$FILENAME" | sed 's/^ggml-//' | sed 's/\.bin$//')
 
     echo "Downloading $FILENAME from $REPO..."
+    
+    echo "Our system requires models to be named as 'ggml-<name>.bin'"
+    read -p "Enter a friendly name for this model [$SUGGESTED_NAME]: " FRIENDLY_NAME
+    FRIENDLY_NAME=${FRIENDLY_NAME:-$SUGGESTED_NAME}
+    
+    local TARGET_NAME="ggml-$FRIENDLY_NAME.bin"
+
+    echo "Saving as $TARGET_NAME..."
     URL="https://huggingface.co/$REPO/resolve/main/$FILENAME"
     
     curl -L -o "$MODELS_DIR/$TARGET_NAME" "$URL"
     echo "Done! Model saved to $MODELS_DIR/$TARGET_NAME"
     
     # Update .env if requested
-    read -p "Do you want to set this as the default WHISPER_MODEL in .env? (y/n) [n]: " SET_ENV
+    read -p "Do you want to set '$FRIENDLY_NAME' as the default WHISPER_MODEL in .env? (y/n) [n]: " SET_ENV
     if [[ "$SET_ENV" == "y" || "$SET_ENV" == "Y" ]]; then
-        # Strip .bin from filename for the env variable if it follows the ggml-*.bin pattern
-        MODEL_ENV_VAL=$(echo "$TARGET_NAME" | sed 's/^ggml-//' | sed 's/\.bin$//')
-        sed -i "s/^WHISPER_MODEL=.*/WHISPER_MODEL=$MODEL_ENV_VAL/" "$RECIPE_ROOT/.env"
-        echo "Updated .env with WHISPER_MODEL=$MODEL_ENV_VAL"
+        sed -i "s/^WHISPER_MODEL=.*/WHISPER_MODEL=$FRIENDLY_NAME/" "$RECIPE_ROOT/.env"
+        echo "Updated .env with WHISPER_MODEL=$FRIENDLY_NAME"
     fi
 }
 
