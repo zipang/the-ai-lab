@@ -32,14 +32,6 @@ You can download custom or fine-tuned models from Hugging Face using the `downlo
 ./download-community.sh download distil-whisper/distil-large-v3-ggml ggml-distil-large-v3.bin
 ```
 
-## Configuration
-
-You can change the default model used by the recipe by running:
-
-```bash
-./update-default-model.sh
-```
-
 ## Installation
 
 To make the recipe available to the agent, update your configuration files.
