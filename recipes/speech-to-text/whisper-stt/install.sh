@@ -2,9 +2,10 @@
 set -e
 
 # Configuration
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RECIPE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+STT_ROOT="$(dirname "$RECIPE_ROOT")"
+WHISPER_CPP_DIR="$STT_ROOT/whisper.cpp"
 REPO_URL="https://github.com/ggerganov/whisper.cpp"
-INSTALL_DIR="$PROJECT_ROOT/whisper.cpp"
 
 echo "--- Speech-to-Text: Whisper.cpp Installer ---"
 
@@ -17,10 +18,10 @@ for cmd in git make gcc g++ cmake bun ffmpeg; do
 done
 
 # 1. Clone and Build Whisper.cpp
-if [ ! -d "$INSTALL_DIR" ]; then
+if [ ! -d "$WHISPER_CPP_DIR" ]; then
     echo "Cloning whisper.cpp..."
-    git clone "$REPO_URL" "$INSTALL_DIR"
-    cd "$INSTALL_DIR"
+    git clone "$REPO_URL" "$WHISPER_CPP_DIR"
+    cd "$WHISPER_CPP_DIR"
     echo "Building whisper.cpp (static build for portability)..."
     cmake -B build -DBUILD_SHARED_LIBS=OFF
     cmake --build build --config Release -j
@@ -28,7 +29,7 @@ if [ ! -d "$INSTALL_DIR" ]; then
     cp build/bin/whisper-cli ./whisper-cli
 else
     echo "whisper.cpp already exists, skipping clone/build."
-    cd "$INSTALL_DIR"
+    cd "$WHISPER_CPP_DIR"
     # Even if it exists, let's ensure it's built statically if it wasn't
     if [ ! -f "./whisper-cli" ] || ldd ./whisper-cli | grep -q "not found"; then
         echo "Rebuilding whisper.cpp for portability..."
@@ -49,18 +50,18 @@ echo "  base.en    | 142 MB | ~500MB| English only"
 echo "  base       | 142 MB | ~500MB| Multilingual (Recommended)"
 echo "  small.en   | 466 MB | ~1.0GB| English only"
 echo "  small      | 466 MB | ~1.0GB| Multilingual"
-  echo "  medium.en  | 1.5 GB | ~2.5GB| English only"
-  echo "  medium     | 1.5 GB | ~2.5GB| Multilingual"
-  echo "  large-v1   | 3.1 GB | ~4.0GB| Multilingual"
-  echo "  large-v2   | 3.1 GB | ~4.0GB| Multilingual"
-  echo "  large-v3   | 3.1 GB | ~4.0GB| Multilingual"
-  echo "  large-v3-turbo | 1.6 GB | ~2GB | Fast & accurate"
-  echo ""
+echo "  medium.en  | 1.5 GB | ~2.5GB| English only"
+echo "  medium     | 1.5 GB | ~2.5GB| Multilingual"
+echo "  large-v1   | 3.1 GB | ~4.0GB| Multilingual"
+echo "  large-v2   | 3.1 GB | ~4.0GB| Multilingual"
+echo "  large-v3   | 3.1 GB | ~4.0GB| Multilingual"
+echo "  large-v3-turbo | 1.6 GB | ~2GB | Fast & accurate"
+echo ""
 read -p "Enter models (default: base): " SELECTED_MODELS
 
 # If empty, default to base
 if [ -z "$SELECTED_MODELS" ]; then
-    SELECTED_MODELS="base"
+    SELECTED_MODELS="medium"
 fi
 
 # 3. Download Models
@@ -70,7 +71,7 @@ for MODEL in $SELECTED_MODELS; do
 done
 
 # 4. Configure environment
-cd "$PROJECT_ROOT"
+cd "$RECIPE_ROOT"
 ENV_FILE=".env"
 
 echo ""
@@ -120,5 +121,5 @@ bun link
 echo ""
 echo "--- Installation Complete ---"
 echo "Models downloaded: $SELECTED_MODELS"
-echo "Whisper.cpp built in: $INSTALL_DIR"
+echo "Whisper.cpp built in: $WHISPER_CPP_DIR"
 echo "The 'whisper-stt' command is now available."
