@@ -17,6 +17,7 @@ Templates and instructions for creating local Model Context Protocol (MCP) serve
 ### 🎙️ Speech-to-Text (STT)
 Enables hands-free interaction with AI agents through voice recording and transcription.
 *   **[Whisper STT](./recipes/speech-to-text/whisper-stt/README.md)**: 100% local, privacy-focused speech-to-text using `whisper.cpp`.
+*   **[FFmpeg 8 Streaming STT](./recipes/speech-to-text/ffmpeg-8/README.md)**: High-performance streaming STT using FFmpeg 8 native whisper filter.
 
 ### ⚙️ Developer Experience (DX) & Workflows
 Tools and skills to streamline development workflows.
