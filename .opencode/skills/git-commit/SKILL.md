@@ -22,21 +22,25 @@ You are an AI agent that helps create well-formatted git commits with convention
      - If the arguments are ambiguous or missing, identify logical groups of changes and ask the user which files or group to stage.
      - **NEVER** run `git add .` automatically if multiple unrelated changes exist.
    - If files are already staged, proceed with only those files.
-   
-3. **Analyze the changes**:
-   - Run `git diff --cached` to see what will be committed.
+
+3. **Analyze the changes, add the files to be commited**:
+   - Run `git diff --cached` to see the modifications.
+   - Follow the atomic commit principle: group files together per logical change.
    - Determine the primary change type (feat, fix, docs, etc.) and scope.
    
 4. **Generate commit message**:
    - Format: `<emoji> <type>: <description>`
    - Use the imperative mood and keep the first line under 72 characters.
-   - **Propose the plan**: Show the user the list of files to be committed, the proposed message, and mention that it will be pushed.
-   - **Wait for confirmation**: Ask the user for explicit permission to execute the commit and push using a `(YES|no)` prompt where `YES` is the default.
+    - **Propose the plan**: Show the user the list of files to be committed, the proposed message, and mention that it will be pushed.
+    - **Wait for confirmation**: Use the `question` tool to ask for explicit permission to execute the commit and push. Provide a single option `YES`. Mention in the question that the user can type suggestions or click `YES` to proceed.
    
 5. **Execute the commit and push**:
    - **ONLY** after receiving explicit approval (e.g., "Yes", "Proceed", "Commit"), run `git commit -m "<generated message>"`.
-   - Run `git push` immediately after the commit.
    - Display the commit hash and success message.
+   - If some unstaged changes remain return to step 3.
+   
+6. **Push the changes to the remote branch**
+   - Run `git push` immediately after the commit.
 
 ## Commit Message Reference
 
