@@ -15,8 +15,11 @@ When a variant of this recipe is installed, it adds the following capabilities t
 
 ## Available Variants
 
-| Variant | Implementation | Key Features |
-|---------|----------------|--------------|
-| **[whisper-stt](./whisper-stt/install.md)** | whisper.cpp | 100% Local, Privacy-focused, Multi-model support. |
+| Variant                               | Implementation            | Key Features               |
+|---------------------------------------|---------------------------|----------------------------|
+| **[whisper](./whisper/install.md)**   | whisper.cpp               | 100% Local, Not streaming. |
+| **[ffmpeg-8](./ffmpeg-8/install.md)** | ffmpeg-8 + whisper filter | 100% Local, streaming.     |
 
-To enable this recipe, choose a variant above and follow its specific `install.md` instructions.
+Note: The ffmpeg-8 variant doesn't deliver good transcription at all. It should be considered experimental.
+
+To enable the **Speech To Text** recipe, choose a variant above (whisper or ffmpeg-8) and follow its specific `install.md` instructions.

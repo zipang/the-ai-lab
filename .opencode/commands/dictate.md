@@ -1,7 +1,6 @@
 ---
-description: Start voice dictation with live feedback
+description: Start/Stop speech-to-text dictation
 ---
-I want to dictate my next prompt with live feedback.
-1. Run the command `dictate`.
-2. I will see the transcription live as I speak.
-3. Once I press ENTER to stop, use the final transcribed text as my next prompt.
+
+Activate the dictation mode. Press SPACE to start/stop recording.
+Your speech will be transcribed in real-time and added to the prompt.
