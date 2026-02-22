@@ -1,4 +1,4 @@
-recordings/
+whisper.cpp/
 *.wav
 *.mp3
 *.ogg
