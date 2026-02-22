@@ -1,17 +1,18 @@
 {
-  "name": "opencode-transcribe-skill",
-  "version": "1.0.0",
-  "description": "Local Speech To Text skill using whisper.cpp and Bun",
+  "name": "opencode-text-to-speech-plugin",
+  "version": "0.1.0",
+  "description": "Local Speech-to-Text plugin for Opencode using Whisper.cpp",
   "type": "module",
-  "bin": {
-    "dictate": "./bin/dictate.ts"
+  "exports": {
+    ".": "./dist/index.js"
   },
   "scripts": {
+    "build": "bun build ./src/index.ts --outdir dist --target bun && cp .env dist/",
     "register": "bun link"
   },
   "dependencies": {
-    "@opencode-ai/sdk": "^1.2.10",
-    "dotenv": "^17.3.1"
+    "@opencode-ai/plugin": "^1.2.10",
+    "@opencode-ai/sdk": "^1.2.10"
   },
   "devDependencies": {
     "@types/bun": "latest",
