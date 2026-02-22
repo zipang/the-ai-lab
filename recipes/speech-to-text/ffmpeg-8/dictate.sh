@@ -71,6 +71,6 @@ echo "----------------------------------------" >&2
 # -f pulse -i default: captures directly from microphone
 # whisper filter: destination=- sends transcription text directly to stdout
 "$FFMPEG_PATH" -hide_banner -loglevel quiet \
-    -f pulse -i default -ac 1 \
+    -f alsa -i default -ac 1 \
     -af "whisper=model=$MODEL_FILE:language=$LANG:queue=$QUEUE:destination=-:format=text" \
     -f null -
