@@ -1,0 +1,52 @@
+#!/bin/bash
+set -euo pipefail
+
+# Args: audio_file [model] [input_lang] [output_lang]
+AUDIO_FILE="${1:-}"
+
+# Load environment variables
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+if [ -f "$BASE_DIR/.env" ]; then
+    set -a
+    . "$BASE_DIR/.env"
+    set +a
+fi
+
+MODEL="${2:-${WHISPER_MODEL:-base}}"
+INPUT_LANG="${3:-${WHISPER_INPUT:-auto}}"
+OUTPUT_LANG="${4:-${WHISPER_OUTPUT:-${INPUT_LANG}}}"
+
+# Check required args
+[[ -z "$AUDIO_FILE" ]] && { echo "Error: Audio file not provided." >&2; exit 1; }
+[[ -f "$AUDIO_FILE" ]] || { echo "Error: Audio file not found: $AUDIO_FILE" >&2; exit 1; }
+
+# Paths & checks using env vars
+# WHISPER_CLI is expected to be provided by the environment or .env
+[[ -z "${WHISPER_CLI:-}" ]] && { echo "Error: WHISPER_CLI is not set." >&2; exit 1; }
+[[ -f "$WHISPER_CLI" ]] || { echo "Error: whisper-cli not found at $WHISPER_CLI" >&2; exit 1; }
+
+WHISPER_MODELS_PATH="${WHISPER_MODELS_PATH:-$BASE_DIR/whisper.cpp/models}"
+MODEL_FILE="${WHISPER_MODELS_PATH}/ggml-$MODEL.bin"
+[[ -f "$MODEL_FILE" ]] || { echo "Error: Model not found at $MODEL_FILE" >&2; exit 1; }
+
+# Translate flag
+TR_FLAG=""
+[[ "$OUTPUT_LANG" == "en" && "$INPUT_LANG" != "en" ]] && TR_FLAG="-tr"
+
+# Whisper arguments
+WHISPER_ARGS=(-m "$MODEL_FILE" -f "$AUDIO_FILE" -nt -l "$INPUT_LANG")
+[[ -n "$TR_FLAG" ]] && WHISPER_ARGS+=("$TR_FLAG")
+
+# VAD support
+if [[ -n "${WHISPER_VAD_MODEL:-}" && -f "$WHISPER_VAD_MODEL" ]]; then
+    WHISPER_ARGS+=(--vad -vm "$WHISPER_VAD_MODEL")
+fi
+
+# Execute whisper-cli
+"$WHISPER_CLI" "${WHISPER_ARGS[@]}" 2>/tmp/whisper_error.log | grep -vE '^(whisper_|system_info|main:|\s*$|\[)' || {
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
+        cat /tmp/whisper_error.log >&2
+        exit 1
+    fi
+}

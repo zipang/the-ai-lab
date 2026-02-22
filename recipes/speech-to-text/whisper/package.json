@@ -1,0 +1,19 @@
+{
+  "name": "opencode-transcribe-skill",
+  "version": "1.0.0",
+  "description": "Local Speech To Text skill using whisper.cpp and Bun",
+  "type": "module",
+  "bin": {
+    "dictate": "./bin/dictate.ts"
+  },
+  "scripts": {
+    "register": "bun link"
+  },
+  "dependencies": {
+    
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "latest"
+  }
+}

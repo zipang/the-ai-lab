@@ -23,7 +23,7 @@ if [ ! -d "$WHISPER_CPP_DIR" ]; then
     git clone "$REPO_URL" "$WHISPER_CPP_DIR"
     cd "$WHISPER_CPP_DIR"
     echo "Building whisper.cpp (static build for portability)..."
-    cmake -B build -DBUILD_SHARED_LIBS=OFF
+    cmake -B build -DBUILD_SHARED_LIBS=OFF -DWHISPER_FFMPEG=OFF -DGGML_OPENMP=OFF
     cmake --build build --config Release -j
     # Copy recommended binary to root
     cp build/bin/whisper-cli ./whisper-cli
@@ -33,7 +33,7 @@ else
     # Even if it exists, let's ensure it's built statically if it wasn't
     if [ ! -f "./whisper-cli" ] || ldd ./whisper-cli | grep -q "not found"; then
         echo "Rebuilding whisper.cpp for portability..."
-        cmake -B build -DBUILD_SHARED_LIBS=OFF
+        cmake -B build -DBUILD_SHARED_LIBS=OFF -DWHISPER_FFMPEG=OFF -DGGML_OPENMP=OFF
         cmake --build build --config Release -j
         cp build/bin/whisper-cli ./whisper-cli
     fi
@@ -69,6 +69,17 @@ for MODEL in $SELECTED_MODELS; do
     echo "Downloading model: $MODEL..."
     bash ./models/download-ggml-model.sh "$MODEL"
 done
+
+# 3b. Download VAD Model
+echo ""
+echo "> Select VAD (Voice Activity Detection) model:"
+echo "  - silero-v5.1.2"
+echo "  - silero-v6.2.0 (Recommended)"
+read -p "Enter VAD model (default: silero-v6.2.0): " VAD_MODEL
+VAD_MODEL=${VAD_MODEL:-silero-v6.2.0}
+
+echo "Downloading VAD model: $VAD_MODEL..."
+bash ./models/download-vad-model.sh "$VAD_MODEL"
 
 # 4. Configure environment
 cd "$RECIPE_ROOT"
@@ -107,8 +118,9 @@ DEFAULT_MODEL=$(echo $SELECTED_MODELS | awk '{print $1}')
 echo "Writing configuration to $(pwd)/$ENV_FILE..."
 cat > "$ENV_FILE" <<EOF
 WHISPER_MODEL=$DEFAULT_MODEL
-WHISPER_BIN=$WHISPER_CPP_DIR/whisper-cli
+WHISPER_CLI=$WHISPER_CPP_DIR/whisper-cli
 WHISPER_MODELS_PATH=$WHISPER_CPP_DIR/models
+WHISPER_VAD_MODEL=$WHISPER_CPP_DIR/models/${VAD_MODEL}.ggml.bin
 WHISPER_AUDIO_DRIVER=$AUDIO_DRIVER
 WHISPER_INPUT=$WHISPER_INPUT
 WHISPER_OUTPUT=$WHISPER_OUTPUT
