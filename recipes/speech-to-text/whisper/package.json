@@ -1,5 +1,5 @@
 {
-  "name": "opencode-text-to-speech-plugin",
+  "name": "opencode-speech-to-text-plugin",
   "version": "0.1.0",
   "description": "Local Speech-to-Text plugin for Opencode using Whisper.cpp",
   "type": "module",

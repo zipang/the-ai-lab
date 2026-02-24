@@ -6,13 +6,13 @@ import fs from "node:fs";
 import { $ } from "bun";
 
 const {
-  WHISPER_MODEL: ENV_MODEL = "base",
+  WHISPER_MODEL = "base",
   WHISPER_CLI,
   WHISPER_MODELS_PATH,
   WHISPER_VAD_MODEL,
   WHISPER_AUDIO_DRIVER = "alsa",
-  WHISPER_INPUT: ENV_INPUT = "auto",
-  WHISPER_OUTPUT: ENV_OUTPUT = "auto"
+  WHISPER_INPUT = "auto",
+  WHISPER_OUTPUT = "auto",
 } = process.env;
 
 export interface DictateArgs {
@@ -25,8 +25,8 @@ export async function dictate(args: DictateArgs = {}) {
   const tempFile = join(tmpdir(), `dictate-${Date.now()}.wav`);
   let soxProcess: any = null;
 
-  const model = args.model || ENV_MODEL;
-  const language = args.language || ENV_INPUT;
+  const model = args.model || WHISPER_MODEL;
+  const language = args.language || WHISPER_INPUT;
 
   const cleanup = () => {
     if (soxProcess) {
@@ -42,10 +42,13 @@ export async function dictate(args: DictateArgs = {}) {
     }
   };
 
-  // We should handle process signals in the plugin host usually, 
+  // We should handle process signals in the plugin host usually,
   // but for local safety we can add them here if this is a separate process.
   // In Opencode plugins, each plugin runs in its own worker/process.
-  const sigHandler = () => { cleanup(); process.exit(0); };
+  const sigHandler = () => {
+    cleanup();
+    process.exit(0);
+  };
   process.on("SIGINT", sigHandler);
   process.on("SIGTERM", sigHandler);
 
@@ -55,15 +58,25 @@ export async function dictate(args: DictateArgs = {}) {
     }
 
     // 1. Start Recording
-    await client.tui.showToast({ body: { message: "🎙️ Recording... (SPACE or ENTER to stop)", variant: "info" } });
+    await client.tui.showToast({
+      body: {
+        message: "🎙️ Recording... (SPACE or ENTER to stop)",
+        variant: "info",
+      },
+    });
 
     soxProcess = spawn("sox", [
       "-q",
-      "-t", WHISPER_AUDIO_DRIVER, "default",
-      "-c", "1",
-      "-r", "16000",
-      "-b", "16",
-      tempFile
+      "-t",
+      WHISPER_AUDIO_DRIVER,
+      "default",
+      "-c",
+      "1",
+      "-r",
+      "16000",
+      "-b",
+      "16",
+      tempFile,
     ]);
 
     soxProcess.on("error", (err: Error) => {
@@ -82,7 +95,8 @@ export async function dictate(args: DictateArgs = {}) {
           process.stdin.off("data", handler);
           resolve();
         }
-        if (data === "\u0003") { // Ctrl+C
+        if (data === "\u0003") {
+          // Ctrl+C
           cleanup();
           process.exit(0);
         }
@@ -96,60 +110,85 @@ export async function dictate(args: DictateArgs = {}) {
     if (soxProcess) {
       soxProcess.kill("SIGTERM");
       // Wait for file to flush
-      await new Promise(r => setTimeout(r, 200));
+      await new Promise((r) => setTimeout(r, 200));
     }
 
     if (!fs.existsSync(tempFile) || fs.statSync(tempFile).size < 100) {
-      await client.tui.showToast({ body: { message: "⚠️ No audio recorded", variant: "warning" } });
+      await client.tui.showToast({
+        body: { message: "⚠️ No audio recorded", variant: "warning" },
+      });
       return "No audio recorded";
     }
 
     // 3. Transcribe
-    await client.tui.showToast({ body: { message: "⚙️ Transcribing...", variant: "info" } });
+    await client.tui.showToast({
+      body: { message: "⚙️ Transcribing...", variant: "info" },
+    });
 
     const modelFile = join(WHISPER_MODELS_PATH || "", `ggml-${model}.bin`);
-    const whisperArgs = ["-m", modelFile, "-f", tempFile, "-nt", "-l", language];
+    const whisperArgs = [
+      "-m",
+      modelFile,
+      "-f",
+      tempFile,
+      "-nt",
+      "-l",
+      language,
+    ];
 
-    if (ENV_OUTPUT === "en" && language !== "en") {
+    if (WHISPER_OUTPUT === "en" && language !== "en") {
       whisperArgs.push("-tr");
     }
 
-    if (WHISPER_VAD_MODEL && fs.existsSync(WHISPER_VAD_MODEL)) {
-      whisperArgs.push("--vad", "-vm", WHISPER_VAD_MODEL);
+    let vadModelPath = WHISPER_VAD_MODEL;
+    if (vadModelPath && WHISPER_MODELS_PATH && !fs.existsSync(vadModelPath)) {
+      // Assume path resolution convention: models path + /ggml-<short_name>.bin
+      vadModelPath = join(WHISPER_MODELS_PATH, `ggml-${vadModelPath}.bin`);
+    }
+
+    if (vadModelPath && fs.existsSync(vadModelPath)) {
+      whisperArgs.push("--vad", "-vm", vadModelPath);
     }
 
     // Execute whisper-cli
-    const { stdout, stderr, exitCode } = await $`${WHISPER_CLI} ${whisperArgs}`.quiet().nothrow();
+    const { stdout, stderr, exitCode } = await $`${WHISPER_CLI} ${whisperArgs}`
+      .quiet()
+      .nothrow();
 
     if (exitCode !== 0) {
       console.error("[ERROR] Whisper-cli failed:", stderr.toString());
-      await client.tui.showToast({ body: { message: "❌ Transcription failed", variant: "error" } });
+      await client.tui.showToast({
+        body: { message: "❌ Transcription failed", variant: "error" },
+      });
       return "Transcription failed";
     }
 
-    const transcription = stdout.toString()
-      .split("\n")
-      .filter(line => !line.match(/^(whisper_|system_info|main:|\s*$|\[)/))
-      .join(" ")
+    const transcription = stdout
+      .toString()
       .trim();
 
     if (!transcription) {
-      await client.tui.showToast({ body: { message: "😶 No speech detected", variant: "warning" } });
+      await client.tui.showToast({
+        body: { message: "😶 No speech detected", variant: "warning" },
+      });
       return "No speech detected";
     }
 
     // 4. Update TUI
     await client.tui.clearPrompt();
     await client.tui.appendPrompt({ body: { text: transcription } });
-    await client.tui.showToast({ body: { message: "✅ Transcription added", variant: "success" } });
+    await client.tui.showToast({
+      body: { message: "✅ Transcription added", variant: "success" },
+    });
 
-    return `Transcription successful: ${transcription}`;
-
+    return \`Transcription successful: \${transcription}\`;
   } catch (error: any) {
     const errorMsg = error instanceof Error ? error.message : String(error);
     console.error("[ERROR]", errorMsg);
-    await client.tui.showToast({ body: { message: `❌ Error: ${errorMsg}`, variant: "error" } });
-    return `Error: ${errorMsg}`;
+    await client.tui.showToast({
+      body: { message: \`❌ Error: \${errorMsg}\`, variant: "error" },
+    });
+    return \`Error: \${errorMsg}\`;
   } finally {
     cleanup();
     process.off("SIGINT", sigHandler);

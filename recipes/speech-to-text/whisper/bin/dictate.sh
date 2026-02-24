@@ -35,12 +35,22 @@ done
 MODEL="${POSITIONAL_ARGS[0]:-${WHISPER_MODEL:-base}}"
 INPUT_LANG="${POSITIONAL_ARGS[1]:-${WHISPER_INPUT:-auto}}"
 OUTPUT_LANG="${POSITIONAL_ARGS[2]:-${WHISPER_OUTPUT:-${INPUT_LANG}}}"
+VAD_MODEL="${WHISPER_VAD_MODEL:-}"
 
 # Paths & checks first
 [[ -f "$WHISPER_CLI" ]] || { echo "whisper-cli not found" >&2; exit 1; }
 
 MODEL_PATH="${WHISPER_MODELS_PATH:-$BASE_DIR/whisper.cpp/models}/ggml-$MODEL.bin"
 [[ -f "$MODEL_PATH" ]] || { echo "Model not found: $MODEL_PATH" >&2; exit 1; }
+
+VAD_MODEL_PATH=""
+if [[ -n "$VAD_MODEL" ]] && [[ -n "$WHISPER_MODELS_PATH" ]]; then
+    VAD_MODEL_PATH="${WHISPER_MODELS_PATH}/ggml-$VAD_MODEL.bin"
+    if [[ ! -f "$VAD_MODEL_PATH" ]]; then
+        echo "VAD Model not found: $VAD_MODEL_PATH" >&2
+        exit 1
+    fi
+fi
 
 command -v sox >/dev/null || { echo "sox required" >&2; exit 1; }
 
@@ -88,6 +98,6 @@ fi
 [[ -s "$AUDIO_FILE" ]] || { echo "No audio in $AUDIO_FILE" >&2; exit 1; }
 
 # Call transcription script
-"$SCRIPT_DIR/transcribe-audio" "$AUDIO_FILE" "$MODEL" "$INPUT_LANG" "$OUTPUT_LANG"
+"$SCRIPT_DIR/transcribe-audio" "$AUDIO_FILE" "$MODEL_PATH" "$INPUT_LANG" "$OUTPUT_LANG" "$VAD_MODEL_PATH"
 
 SUCCESS=true
