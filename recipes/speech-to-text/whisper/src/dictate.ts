@@ -1,9 +1,9 @@
-import { createOpencodeClient } from "@opencode-ai/sdk";
 import { spawn } from "child_process";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import fs from "node:fs";
 import { $ } from "bun";
+import type { OpencodeClient } from "@opencode-ai/sdk";
 
 const {
   WHISPER_MODEL = "base",
@@ -20,8 +20,7 @@ export interface DictateArgs {
   language?: string;
 }
 
-export async function dictate(args: DictateArgs = {}) {
-  const client = createOpencodeClient();
+export async function dictate(client: OpencodeClient, args: DictateArgs = {}) {
   const tempFile = join(tmpdir(), `dictate-${Date.now()}.wav`);
   let soxProcess: any = null;
 
@@ -181,14 +180,14 @@ export async function dictate(args: DictateArgs = {}) {
       body: { message: "✅ Transcription added", variant: "success" },
     });
 
-    return \`Transcription successful: \${transcription}\`;
+    return `Transcription successful: ${transcription}`;
   } catch (error: any) {
     const errorMsg = error instanceof Error ? error.message : String(error);
     console.error("[ERROR]", errorMsg);
     await client.tui.showToast({
-      body: { message: \`❌ Error: \${errorMsg}\`, variant: "error" },
+      body: { message: `❌ Error: ${errorMsg}`, variant: "error" },
     });
-    return \`Error: \${errorMsg}\`;
+    return `Error: ${errorMsg}`;
   } finally {
     cleanup();
     process.off("SIGINT", sigHandler);

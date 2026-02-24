@@ -6,8 +6,11 @@
   "exports": {
     ".": "./dist/index.js"
   },
+  "bin": {
+    "dictate": "./bin/dictate.sh"
+  },
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir dist --target bun && cp .env dist/",
+    "build": "bun build ./src/index.ts --outdir dist --target bun",
     "register": "bun link"
   },
   "dependencies": {

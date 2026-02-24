@@ -120,7 +120,7 @@ cat > "$ENV_FILE" <<EOF
 WHISPER_MODEL=$DEFAULT_MODEL
 WHISPER_CLI=$WHISPER_CPP_DIR/whisper-cli
 WHISPER_MODELS_PATH=$WHISPER_CPP_DIR/models
-WHISPER_VAD_MODEL=$WHISPER_CPP_DIR/models/${VAD_MODEL}.ggml.bin
+WHISPER_VAD_MODEL=${VAD_MODEL}
 WHISPER_AUDIO_DRIVER=$AUDIO_DRIVER
 WHISPER_INPUT=$WHISPER_INPUT
 WHISPER_OUTPUT=$WHISPER_OUTPUT
@@ -129,11 +129,17 @@ EOF
 echo "Initializing Bun project in $(pwd)..."
 bun install
 
-echo "Registering 'whisper-stt' command globally..."
+echo "Building and registering 'whisper-stt' command globally..."
+bun run build
 bun link
+
+echo "Registering Opencode plugin globally..."
+mkdir -p ~/.config/opencode/plugins
+ln -sf "$(pwd)/dist/index.js" ~/.config/opencode/plugins/whisper.js
 
 echo ""
 echo "--- Installation Complete ---"
 echo "Models downloaded: $SELECTED_MODELS"
 echo "Whisper.cpp built in: $WHISPER_CPP_DIR"
-echo "The 'whisper-stt' command is now available."
+echo "The 'dictate' command is now available."
+echo "The Whisper plugin is registered in Opencode (~/.config/opencode/plugins/whisper.js)."
