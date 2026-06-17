@@ -50,6 +50,11 @@ IMPORTANT: Do not oveflow the user with too much information : you must procede 
 For each step, provide a clear question and present the user with several options (A. B. C. D...) and a free choice (enter a response not in the list of options)
 
 - **Mood & Tone**: What is the general idea ?
+- **Scale Definition**: Establish the size system using mathematical scales.
+  - **Typographic scale**: Choose a base size (default `0.75rem`) and a ratio (`1.125` Minor Second, `1.25` Major Third, `1.333` Perfect Fourth, `1.5` Perfect Fifth, `1.618` Golden Ratio).
+  - **Spacing scale**: Choose a base unit (default `0.25rem`) and a factor (`1.5`, `2`).
+  - **Radius scale**: Choose a base unit (default `0.25rem`) and a factor (`1.5`, `2`).
+  The agent computes all step values using the formula `base × ratio^stepIndex` (typography) or `base × factor^stepIndex` (spacing/radius). The resulting CSS variables use the `--{category}-{step}` naming pattern (e.g., `--typography-md`, `--spacing-xl`, `--radius-sm`).
 - **Typography**: Propose some clear choices for fonts used in the headings, body text, and optionally labels (use references).
 - **Color Palette**: Loop to create and name each new color : color name, expected usage (heading, text, primary accent, ..), value (HSL), variants needed (hover, disactivated, ...).
 - **Component Anatomy**: Look and feel of buttons, cards, and interactive elements (rounded corners, borders, shadows..).
@@ -64,6 +69,16 @@ For each step, provide a clear question and present the user with several option
 
 Note: all these values must be found inside the main stylesheet of the page and not guessed.
 
+#### 3. **Scale Adjustment**
+
+After initial scale definition, the user may want to adjust the overall proportions. Always propose this as an option when refining a design:
+
+- **Change typographic ratio**: A larger ratio produces more dramatic size differences between steps (e.g., `1.25` → `1.333`). A smaller ratio compresses the visual hierarchy.
+- **Change base size**: Raising the base (`0.75rem` → `1rem`) scales every step proportionally while preserving the ratio.
+- **Change spacing factor**: `2` doubles each step (0.25, 0.5, 1, 2, 4...), `1.5` produces a gentler progression (0.25, 0.375, 0.563, 0.844...).
+
+**Important**: When any scale parameter changes, the agent MUST recompute ALL derived token values and regenerate the DESIGN.md, theme.css, and style guide.
+
 At the conclusion of the ideation phase, you MUST update the project's `DESIGN.md` file to reflect the chosen token values.
 Follow the [full detailed specifications of every section inside DESIGN.md](./.ressources/design-file-specs.md.txt) to generate a complete coverage of each design elements extracted (omit the sections that couldn't be extracted).
 
@@ -73,37 +88,51 @@ Here is an example with the expected structure for a typical `DESIGN.md` file:
 ---
 name: My Theme
 version: alpha
+scales:
+  typography:
+    base: 0.75rem
+    ratio: 1.25
+  spacing:
+    base: 0.25rem
+    factor: 2
+  radius:
+    base: 0.25rem
+    factor: 2
 colors:
-  background: "#FFFFF0" # Primary Background (Ivory)
-  headings: "#000" # Headings color (Black)
-  text: "#222" # Body Text color (Dark Gray)
-  primary: "#1A1C1E" # Main accent
+  background: "#FFFFF0"
+  headings: "#000"
+  text: "#222"
+  primary: "#1A1C1E"
   secondary: "#6C7278"
   neutral: "#B8422E"
 typography:
-  headings:
-    fontFamily: Georgia, serif
+  xs:
+    fontFamily: Figtree
+    fontWeight: 400
+    lineHeight: 1.5
+  sm:
+    fontFamily: Figtree
+    fontWeight: 400
+    lineHeight: 1.5
+  md:
+    fontFamily: Figtree
+    fontWeight: 400
+    lineHeight: 1.5
+  lg:
+    fontFamily: "Public Sans"
     fontWeight: 600
     lineHeight: 1.1
     letterSpacing: -0.02em
-  body:
-    fontFamily: Public Sans
-    fontWeight: 400
-    lineHeight: 1.4
-  labels:
-    fontFamily: Courier New, mono
-    fontWeight: 400
-    lineHeight: 1.2
-rounded:
-  sm: 4px # Rounded radius for buttons
-  md: 8px # Rounded radius for cards
-  lg: 99px # Rounded radius for pills
-spacing:
-  xs: 0.25rem
-  sm: 0.5rem
-  md: 1rem
-  lg: 2rem
-  xl: 4rem
+  xl:
+    fontFamily: "Public Sans"
+    fontWeight: 600
+    lineHeight: 1.1
+    letterSpacing: -0.02em
+  xxl:
+    fontFamily: "Public Sans"
+    fontWeight: 600
+    lineHeight: 1.1
+    letterSpacing: -0.02em
 ---
 
 ## Overview
@@ -114,7 +143,7 @@ Explain the color palette and its usage with the generated tokens.
 
 ## Typography
 
-Detail the styles for the headings, body, code extract.. (each font family usage)
+Detail which scale steps map to which semantic roles (e.g., `typography-xs` for captions, `typography-md` for body, `typography-xxl` for headings).
 
 ## Elevation and Depth
 
@@ -144,7 +173,13 @@ This stylesheet contains all the theme values exposed as global (:root level) CS
 
 Every aspect of the design system and its main file (DESIGN.md) must be extracted and exposed inside the theme stylesheet as CSS variables.
 Every variable found in the YAML front matter must have its declaration in the `theme.css` using a consistent naming approach (CSS variables using all lowercase names separated with dash `-`). 
-For instance `${typography.body.fontFamily}` in the YAML front matter is declared as `--typography-body-fontfamily` inside `theme.css`.
+
+For scale-based tokens, the naming follows the pattern `--{category}-{step}`:
+- `scales.typography` → `--typography-xs`, `--typography-sm`, `--typography-md`, `--typography-lg`, `--typography-xl`, `--typography-xxl`, `--typography-xxxl`
+- `scales.spacing` → `--spacing-xs`, `--spacing-sm`, `--spacing-md`, `--spacing-lg`, `--spacing-xl`, `--spacing-xxl`
+- `scales.radius` → `--radius-xs`, `--radius-sm`, `--radius-md`, `--radius-lg`, `--radius-xl`, `--radius-full`
+
+For explicit (non-scale) tokens, use the full path flattened: `${typography.body.fontFamily}` → `--typography-body-fontfamily`.
 
 Every size unit must be expressed using the `rem` unit. This is super important and powerful because it allows to have a single media-query rule that will change the body font size at specific size (mobile, tablet, desktop) and every element size will follow in accordance because they use the `rem` unit.
 

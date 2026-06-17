@@ -27,12 +27,22 @@ colors:
   secondary: "#6C7278"
   tertiary: "#B8422E"
 typography:
-  h1:
+  md:
     fontFamily: Public Sans
-    fontSize: 48px
+    fontWeight: 400
+    lineHeight: 1.6
+  lg:
+    fontFamily: Public Sans
     fontWeight: 600
     lineHeight: 1.1
     letterSpacing: -0.02em
+scales:
+  typography:
+    base: 0.75rem
+    ratio: 1.25
+  spacing:
+    base: 0.25rem
+    factor: 2
 ---
 ```
 
@@ -48,6 +58,10 @@ colors:
   <token-name>: <Color>
 typography:
   <token-name>: <Typography>
+scales:
+  typography: <Scale>
+  spacing: <Scale>
+  radius: <Scale>
 rounded:
   <scale-level>: <Dimension>
 spacing:
@@ -56,8 +70,6 @@ components:
   <component-name>:
     <token-name>: <string|token reference>
 ```
-
-The `<scale-level>` placeholder represents a named level in a sizing or spacing scale. Common level names include `xs`, `sm`, `md`, `lg`, `xl`, and `full`. Any descriptive string key is valid.
 
 **Color**: A color value must start with "#" followed by a hex color code in the SRGB color space.
 
@@ -74,6 +86,74 @@ The `<scale-level>` placeholder represents a named level in a sizing or spacing 
 **Dimension**: A dimension value is a string with a unit suffix. Valid units are: px, em, rem.
 
 **Token References**: A token reference must be wrapped in curly braces, and contain an object path to another value in the YAML tree. For most token groups, the reference must point to a primitive value (e.g., `colors.primary-60`), not a group (e.g., `colors`). Within the `components` section, references to composite values (e.g., `{typography.label-md}`) are permitted.
+
+## Scales
+
+The `scales` section defines the mathematical formulas that generate size values for typography, spacing, and rounded corners. Instead of hardcoding each size, you declare a scale — the agent computes every size token from it.
+
+**Scale** is a map with the following parameters:
+
+```yaml
+scales:
+  typography:
+    base: <Dimension>   # step 0 size (xs)
+    ratio: <number>     # multiplier per step (e.g., 1.25, 1.333, 1.618)
+  spacing:
+    base: <Dimension>   # step 0 size (xs)
+    factor: <number>    # multiplier per step (e.g., 1.5, 2)
+```
+
+### Step Levels
+
+Every scale uses the same implicit step levels, ordered from smallest to largest:
+
+`2xs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl`, `xxxl`
+
+Step 0 = `xs` (the base). Positive indices go larger, negative indices go smaller.
+
+### Formulas
+
+The value for a given step level is computed as:
+
+| Scale | Formula | Example (typography: base=0.75rem, ratio=1.25) |
+|-------|---------|-------------------------------------------------|
+| `typography` | `base × ratio^stepIndex` | `md` (step 2) = `0.75rem × 1.25² = 1.172rem` |
+| `spacing` | `base × factor^stepIndex` | `lg` (step 3) = `0.25rem × 2³ = 2rem` |
+| `radius` | `base × factor^stepIndex` | `sm` (step 1) = `0.25rem × 2¹ = 0.5rem` |
+
+The `radius` scale has a special step: `full` always resolves to `9999px` regardless of the scale parameters.
+
+### Computation table
+
+Given `typography: { base: 0.75rem, ratio: 1.25 }`:
+
+| Step | Index | Value   | Common usage          |
+|------|-------|---------|-----------------------|
+| 2xs  | -2    | 0.48rem | micro labels          |
+| xs   | 0     | 0.75rem | captions              |
+| sm   | 1     | 0.938rem | small body           |
+| md   | 2     | 1.172rem | body text             |
+| lg   | 3     | 1.465rem | h4/h5                 |
+| xl   | 4     | 1.831rem | h3                    |
+| xxl  | 5     | 2.289rem | h1/h2                 |
+| xxxl | 6     | 2.861rem | display               |
+
+### Token naming convention
+
+All size tokens generated from a scale follow the pattern `{category}-{step}`:
+
+| Category       | Token examples                       | CSS variable                  |
+|----------------|--------------------------------------|-------------------------------|
+| `typography`   | `typography-xs`, `typography-md`     | `--typography-xs`             |
+| `spacing`      | `spacing-sm`, `spacing-xl`           | `--spacing-xl`                |
+| `radius`       | `radius-md`, `radius-lg`, `radius-full` | `--radius-full`           |
+
+When `scales` is defined in the frontmatter, the agent:
+1. Computes each step value using the formula
+2. Generates CSS variables using the `--{category}-{step}` naming pattern
+3. Updates the `typography`, `spacing`, and `rounded` token sections with computed values
+
+When `scales` is absent, the design system falls back to fully explicit token values (backward-compatible).
 
 # Sections
 
@@ -170,25 +250,25 @@ The `typography` section defines the precise font properties for the typography 
 It is a
 map\<string, Typography>
 
+Token names follow the `{category}-{step}` convention when a `scales.typography` is defined — e.g., `typography-xs`, `typography-sm`, `typography-md`, `typography-lg`, `typography-xl`, `typography-xxl`.
+
+When `scales.typography` is present, the `fontSize` property is **omitted** — it is derived automatically from the scale formula. If `scales` is absent, `fontSize` must be provided explicitly (backward-compatible).
+
 ```yaml
 typography:
-  h1:
+  sm:
+    fontFamily: Figtree
+    fontWeight: 400
+    lineHeight: 1.5
+  md:
+    fontFamily: Figtree
+    fontWeight: 400
+    lineHeight: 1.5
+  lg:
     fontFamily: Public Sans
-    fontSize: 48px
     fontWeight: 600
     lineHeight: 1.1
     letterSpacing: -0.02em
-  body-md:
-    fontFamily: Public Sans
-    fontSize: 16px
-    fontWeight: 400
-    lineHeight: 1.6
-  label-caps:
-    fontFamily: Space Grotesk
-    fontSize: 12px
-    fontWeight: 500
-    lineHeight: 1
-    letterSpacing: 0.1em
 ```
 
 ## Layout
@@ -335,11 +415,19 @@ This section provides practical guidelines and common pitfalls. These act as gua
 
 The following names are commonly used across design systems. They are not required but are provided as guidance for consistency.
 
+When using scale-based tokens, the naming convention is `{category}-{step}`. When defining tokens explicitly (without scales), any descriptive name is valid.
+
+**Scale-based naming:**
+
+| Category | Token pattern | Examples |
+|----------|---------------|----------|
+| `typography` | `typography-{step}` | `typography-xs`, `typography-md`, `typography-xxl` |
+| `spacing` | `spacing-{step}` | `spacing-xs`, `spacing-lg`, `spacing-xxxl` |
+| `radius` | `radius-{step}` | `radius-sm`, `radius-md`, `radius-full` |
+
 **Colors:** `primary`, `secondary`, `tertiary`, `neutral`, `surface`, `on-surface`, `error`
 
-**Typography:** `headline-display`, `headline-lg`, `headline-md`, `body-lg`, `body-md`, `body-sm`, `label-lg`, `label-md`, `label-sm`
-
-**Rounded:** `none`, `sm`, `md`, `lg`, `xl`, `full`
+**Rounded (explicit):** `none`, `sm`, `md`, `lg`, `xl`, `full`
 
 # Consumer Behavior for Unknown Content
 
