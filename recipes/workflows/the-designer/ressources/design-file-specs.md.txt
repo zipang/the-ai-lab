@@ -27,11 +27,11 @@ colors:
   secondary: "#6C7278"
   tertiary: "#B8422E"
 typography:
-  md:
+  body:
     fontFamily: Public Sans
     fontWeight: 400
     lineHeight: 1.6
-  lg:
+  heading:
     fontFamily: Public Sans
     fontWeight: 600
     lineHeight: 1.1
@@ -66,6 +66,12 @@ rounded:
   <scale-level>: <Dimension>
 spacing:
   <scale-level>: <Dimension | number>
+font-size:
+  <scale-level>: <Dimension>
+elevation:
+  <preset-name>: <Elevation>
+border:
+  <preset-name>: <Border>
 components:
   <component-name>:
     <token-name>: <string|token reference>
@@ -73,8 +79,14 @@ components:
 
 **Color**: A color value must start with "#" followed by a hex color code in the SRGB color space.
 
+**Elevation**: A string representing a CSS `box-shadow` value (e.g., `"0 2px 8px 0 rgba(0,0,0,0.08)"`).
+
+**Border**: A map with the following properties:
+- `width` (Dimension) - The border width (e.g., `1px`, `0.0625rem`)
+- `style` (string) - The border style keyword (e.g., `solid`, `dashed`, `dotted`)
+- `color` (Color | token reference) - The border color
+
 - `fontFamily` (string)
-- `fontSize` (Dimension)
 - `fontWeight` (number) - A numeric font weight value (e.g., `400`, `700`). In YAML, this may be expressed as either a bare number or a quoted string; both are equivalent.
 - `lineHeight` (Dimension | number) - Accepts either a Dimension (e.g., `24px`, `1.5rem`) or a unitless number (e.g., `1.6`). A unitless number represents a multiplier of the element's `fontSize`, which is the recommended CSS practice.
 - `letterSpacing` (Dimension)
@@ -144,14 +156,14 @@ All size tokens generated from a scale follow the pattern `{category}-{step}`:
 
 | Category       | Token examples                       | CSS variable                  |
 |----------------|--------------------------------------|-------------------------------|
-| `typography`   | `typography-xs`, `typography-md`     | `--typography-xs`             |
+| `font-size`    | `font-size-xs`, `font-size-md`       | `--font-size-xs`              |
 | `spacing`      | `spacing-sm`, `spacing-xl`           | `--spacing-xl`                |
 | `radius`       | `radius-md`, `radius-lg`, `radius-full` | `--radius-full`           |
 
 When `scales` is defined in the frontmatter, the agent:
 1. Computes each step value using the formula
 2. Generates CSS variables using the `--{category}-{step}` naming pattern
-3. Updates the `typography`, `spacing`, and `rounded` token sections with computed values
+3. Updates `spacing` and `rounded` token sections with computed values, and generates the `font-size` token group from `scales.typography`
 
 When `scales` is absent, the design system falls back to fully explicit token values (backward-compatible).
 
@@ -220,11 +232,9 @@ colors:
 
 ## Typography
 
-This section defines typography levels.
+This section defines typography **usage tokens** — semantic roles that describe how text is used, separate from their size.
 
-Most design systems have 9 - 15 typography levels. The design system may prescribe a role for each typography level.
-
-A common naming convention for typography levels is to use semantic categories such as `headline`, `display`, `body`, `label`, `caption`. Each category may further be divided into different sizes, such as `small`, `medium`, and `large`.
+A common naming convention is to use semantic categories such as `body`, `heading`, `label`, `code`, `caption`. Usage tokens define font styling (family, weight, line-height, letter-spacing) but do **not** include size information. Font sizes are defined separately by the `font-size` token group, computed from `scales.typography`. Components combine a usage token with a font-size step.
 
 Example:
 
@@ -236,7 +246,7 @@ the narrative and **Space Grotesk** for technical data.
 
 - **Headlines:** Set in Public Sans Semi-Bold to establish an institutional
   and trustworthy voice.
-- **Body:** Public Sans Regular at 16px ensures contemporary professionalism
+- **Body:** Public Sans Regular ensures contemporary professionalism
   and long-form readability.
 - **Labels:** Space Grotesk is used for all technical data, timestamps, and
   metadata. Its geometric construction evokes the precision of a digital
@@ -245,30 +255,34 @@ the narrative and **Space Grotesk** for technical data.
 
 ### Design Tokens
 
-The `typography` section defines the precise font properties for the typography design tokens.
+The `typography` section defines named font usage tokens. Each token describes the **font styling** (family, weight, line-height, letter-spacing) for a semantic role — it does **not** include any size information. Font sizes are defined separately via the `font-size` token group (computed from `scales.typography`).
 
 It is a
 map\<string, Typography>
 
-Token names follow the `{category}-{step}` convention when a `scales.typography` is defined — e.g., `typography-xs`, `typography-sm`, `typography-md`, `typography-lg`, `typography-xl`, `typography-xxl`.
+Token names follow a **usage-based** convention — e.g., `typography.body`, `typography.heading`, `typography.label`, `typography.code`, `typography.caption`.
 
-When `scales.typography` is present, the `fontSize` property is **omitted** — it is derived automatically from the scale formula. If `scales` is absent, `fontSize` must be provided explicitly (backward-compatible).
+The Typography type **does not** include a `fontSize` property. Font size is chosen per component by referencing the desired step from the `font-size` token group (e.g., `fontSize: "{font-size.md}"`).
 
 ```yaml
 typography:
-  sm:
+  body:
     fontFamily: Figtree
     fontWeight: 400
     lineHeight: 1.5
-  md:
-    fontFamily: Figtree
-    fontWeight: 400
-    lineHeight: 1.5
-  lg:
+  heading:
     fontFamily: Public Sans
     fontWeight: 600
     lineHeight: 1.1
     letterSpacing: -0.02em
+  label:
+    fontFamily: Figtree
+    fontWeight: 600
+    lineHeight: 1.3
+  code:
+    fontFamily: "JetBrains Mono"
+    fontWeight: 400
+    lineHeight: 1.6
 ```
 
 ## Layout
@@ -315,6 +329,17 @@ Also known as "Elevation".
 
 This section describes how visual hierarchy is conveyed based on the design style. If elevation is used, it defines the required styling (spread, blur, color). For flat designs, this section explains the alternative methods used to convey visual hierarchy (e.g., borders, color contrast).
 
+### Design Tokens
+
+The `elevation` section defines named `box-shadow` presets. Each preset is a full CSS `box-shadow` value. A common convention is 3 levels: `subtle`, `medium`, `deep`. The token values are referenced in the `components` section via the `{elevation.<preset-name>}` syntax.
+
+```yaml
+elevation:
+  subtle: "0 1px 2px 0 rgba(0,0,0,0.05)"
+  medium: "0 4px 16px 0 rgba(0,0,0,0.1)"
+  deep: "0 16px 48px 0 rgba(0,0,0,0.15)"
+```
+
 Example:
 
 ```markdown
@@ -326,7 +351,31 @@ background uses a soft off-white or very light green, while primary content sits
 
 ## Shapes
 
-This section describes how visual elements are shaped.
+This section describes how visual elements are shaped. The shape language includes both corner radii (defined by `rounded` tokens) and border styling (defined by `border` tokens).
+
+### Design Tokens
+
+The `border` section defines named border presets. Each preset is a map with `width`, `style`, and `color` properties. A common convention is 4 levels: `none`, `hairline`, `thin`, `thick`.
+
+```yaml
+border:
+  none:
+    width: "0"
+    style: "solid"
+    color: "transparent"
+  hairline:
+    width: "1px"
+    style: "solid"
+    color: "{colors.secondary}"
+  thin:
+    width: "2px"
+    style: "solid"
+    color: "{colors.secondary}"
+  thick:
+    width: "4px"
+    style: "solid"
+    color: "{colors.secondary}"
+```
 
 Example:
 
@@ -379,6 +428,8 @@ components:
   button-primary:
     backgroundColor: "{colors.primary-60}"
     textColor: "{colors.primary-20}"
+    typography: "{typography.label}"
+    fontSize: "{font-size.sm}"
     rounded: "{rounded.md}"
     padding: 12px
   button-primary-hover:
@@ -391,9 +442,12 @@ Each component has a set of properties that are themselves design tokens:
 
 - backgroundColor: \<Color\>
 - textColor: \<Color\>
-- typography: \<Typography\>
+- typography: \<Typography\> — usage token reference (e.g., `{typography.body}`) — provides fontFamily, fontWeight, lineHeight, letterSpacing
+- fontSize: \<token reference\> — references a font-size scale step (e.g., `{font-size.md}`)
 - rounded: \<Dimension\>
 - padding: \<Dimension\>
+- elevation: \<token reference\> — references an `elevation` preset (e.g., `{elevation.soft}`)
+- border: \<token reference\> — references a `border` preset (e.g., `{border.hairline}`)
 - size: \<Dimension\>
 - height: \<Dimension\>
 - width: \<Dimension\>
@@ -421,13 +475,19 @@ When using scale-based tokens, the naming convention is `{category}-{step}`. Whe
 
 | Category | Token pattern | Examples |
 |----------|---------------|----------|
-| `typography` | `typography-{step}` | `typography-xs`, `typography-md`, `typography-xxl` |
+| `font-size` | `font-size-{step}` | `font-size-xs`, `font-size-md`, `font-size-xxl` |
 | `spacing` | `spacing-{step}` | `spacing-xs`, `spacing-lg`, `spacing-xxxl` |
 | `radius` | `radius-{step}` | `radius-sm`, `radius-md`, `radius-full` |
+
+**Typography usages:** `body`, `heading`, `label`, `code`, `caption`
 
 **Colors:** `primary`, `secondary`, `tertiary`, `neutral`, `surface`, `on-surface`, `error`
 
 **Rounded (explicit):** `none`, `sm`, `md`, `lg`, `xl`, `full`
+
+**Elevation:** `subtle`, `medium`, `deep`
+
+**Border:** `none`, `hairline`, `thin`, `thick`
 
 # Consumer Behavior for Unknown Content
 

@@ -54,10 +54,14 @@ For each step, provide a clear question and present the user with several option
   - **Typographic scale**: Choose a base size (default `0.75rem`) and a ratio (`1.125` Minor Second, `1.25` Major Third, `1.333` Perfect Fourth, `1.5` Perfect Fifth, `1.618` Golden Ratio).
   - **Spacing scale**: Choose a base unit (default `0.25rem`) and a factor (`1.5`, `2`).
   - **Radius scale**: Choose a base unit (default `0.25rem`) and a factor (`1.5`, `2`).
-  The agent computes all step values using the formula `base × ratio^stepIndex` (typography) or `base × factor^stepIndex` (spacing/radius). The resulting CSS variables use the `--{category}-{step}` naming pattern (e.g., `--typography-md`, `--spacing-xl`, `--radius-sm`).
-- **Typography**: Propose some clear choices for fonts used in the headings, body text, and optionally labels (use references).
+  The agent computes all step values using the formula `base × ratio^stepIndex` (typography) or `base × factor^stepIndex` (spacing/radius). The resulting CSS variables use the `--{category}-{step}` naming pattern (e.g., `--font-size-md`, `--spacing-xl`, `--radius-sm`).
+- **Typography**: Define font usage tokens — semantic roles like `body`, `heading`, `label`, `code`, `caption`. For each usage, propose choices for `fontFamily`, `fontWeight`, `lineHeight`, and optionally `letterSpacing`. Usage tokens do **not** include font-size — sizes are selected per component from the `font-size` scale steps.
 - **Color Palette**: Loop to create and name each new color : color name, expected usage (heading, text, primary accent, ..), value (HSL), variants needed (hover, disactivated, ...).
-- **Component Anatomy**: Look and feel of buttons, cards, and interactive elements (rounded corners, borders, shadows..).
+- **Surface & Box Styles**: Define the elevation and border vocabulary for all surfaces.
+  - **Elevation presets**: Ask about shadow personality (flat/subtle/moderate/deep) and shadow color (neutral or tinted with an accent color). Generate 3 elevation levels (`subtle`, `medium`, `deep`) as named `box-shadow` tokens.
+  - **Border presets**: Ask about border width personality (none/hairline/thin/thick), border style (solid/dashed/dotted), and border color (reference a color token). Generate 4 border levels (`none`, `hairline`, `thin`, `thick`) as compound shorthand values.
+  The resulting CSS variables use the `--elevation-{name}` and `--border-{name}` naming pattern.
+- **Component Anatomy**: Define component structure — spacing, padding, background colors, typography levels, and interactive states (hover, active, disabled, focus). Components reference previously defined tokens (colors, typography, elevation, border, radius).
 
 #### 2. **Reference-Based Inspiration**
 
@@ -65,7 +69,7 @@ For each step, provide a clear question and present the user with several option
 - **Style Extraction**: When a URL is provided, perform a deep analysis of the CSS and HTML content to extract:
   - Headings and body text styles (extract the font-family and sizes of the h1, h2 elements and of the body).
   - Color palettes for text, backgrounds. (extract the main background-color and the headings and text colors, then extract the other background-color used for accents, usually on buttons elements and as background color for sections)
-  - Extract the border styles (rounding, widths, shadows) for the buttons and cards.
+  - Extract the border styles (width, style, color, rounding) and shadows (box-shadow values) for the buttons and cards. Map extracted shadows to the nearest elevation preset level and borders to the nearest border preset level.
 
 Note: all these values must be found inside the main stylesheet of the page and not guessed.
 
@@ -98,6 +102,27 @@ scales:
   radius:
     base: 0.25rem
     factor: 2
+elevation:
+  subtle: "0 1px 2px 0 rgba(0,0,0,0.05)"
+  medium: "0 4px 16px 0 rgba(0,0,0,0.1)"
+  deep: "0 16px 48px 0 rgba(0,0,0,0.15)"
+border:
+  none:
+    width: "0"
+    style: "solid"
+    color: "transparent"
+  hairline:
+    width: "1px"
+    style: "solid"
+    color: "{colors.secondary}"
+  thin:
+    width: "2px"
+    style: "solid"
+    color: "{colors.secondary}"
+  thick:
+    width: "4px"
+    style: "solid"
+    color: "{colors.secondary}"
 colors:
   background: "#FFFFF0"
   headings: "#000"
@@ -106,33 +131,31 @@ colors:
   secondary: "#6C7278"
   neutral: "#B8422E"
 typography:
-  xs:
+  body:
     fontFamily: Figtree
     fontWeight: 400
     lineHeight: 1.5
-  sm:
-    fontFamily: Figtree
-    fontWeight: 400
-    lineHeight: 1.5
-  md:
-    fontFamily: Figtree
-    fontWeight: 400
-    lineHeight: 1.5
-  lg:
+  heading:
     fontFamily: "Public Sans"
     fontWeight: 600
     lineHeight: 1.1
     letterSpacing: -0.02em
-  xl:
-    fontFamily: "Public Sans"
+  label:
+    fontFamily: Figtree
     fontWeight: 600
-    lineHeight: 1.1
-    letterSpacing: -0.02em
-  xxl:
-    fontFamily: "Public Sans"
-    fontWeight: 600
-    lineHeight: 1.1
-    letterSpacing: -0.02em
+    lineHeight: 1.3
+  code:
+    fontFamily: "JetBrains Mono"
+    fontWeight: 400
+    lineHeight: 1.6
+font-size:
+  xs: 0.75rem
+  sm: 0.938rem
+  md: 1.172rem
+  lg: 1.465rem
+  xl: 1.831rem
+  xxl: 2.289rem
+  xxxl: 2.861rem
 ---
 
 ## Overview
@@ -143,15 +166,15 @@ Explain the color palette and its usage with the generated tokens.
 
 ## Typography
 
-Detail which scale steps map to which semantic roles (e.g., `typography-xs` for captions, `typography-md` for body, `typography-xxl` for headings).
+List the usage tokens (`typography.body`, `typography.heading`, `typography.label`, `typography.code`, `typography.caption`) with their font styling (family, weight, line-height) and describe which `font-size` step each component maps to.
 
 ## Elevation and Depth
 
-If any, give token names for the various box shadows in usage.
+If any, list the elevation presets (e.g., `--elevation-subtle`, `--elevation-medium`, `--elevation-deep`) and describe their intended usage (e.g., subtle for buttons, medium for cards, deep for modals).
 
 ## Shapes
 
-Give tokens to the various border styles (radius, border width, border color) for the shapes of button elements, cards..
+Give tokens to the various border presets (e.g., `--border-hairline`, `--border-thin`, `--border-thick`) and radius tokens (e.g., `--radius-sm`, `--radius-md`) for the shapes of button elements, cards..
 ```
 
 ### Style Guide Generation & Updates
@@ -159,8 +182,10 @@ Give tokens to the various border styles (radius, border width, border color) fo
 The Style Guide is a critical asset, presenting the visual language elements directly implemented in HTML+CSS.
 Every aspect of the visual language must be presented in well organized, separated sections:
 
-- Typography (every size of headings, text, code)
+- Typography (each usage token — body, heading, label, code — shown with its assigned font-size step)
 - Color palette (semantically named and presented with their intended usage)
+- Elevation (each elevation level shown on a sample card with its shadow)
+- Borders (each border variant shown on a sample card)
 - Boxes (several variant with distinct background, borders, shadows..)
 - Buttons (each variant with their intended use case)
 - Practical examples combining all the elements together like : Hero sections, sections with one two three columns of text and/or images
@@ -175,11 +200,17 @@ Every aspect of the design system and its main file (DESIGN.md) must be extracte
 Every variable found in the YAML front matter must have its declaration in the `theme.css` using a consistent naming approach (CSS variables using all lowercase names separated with dash `-`). 
 
 For scale-based tokens, the naming follows the pattern `--{category}-{step}`:
-- `scales.typography` → `--typography-xs`, `--typography-sm`, `--typography-md`, `--typography-lg`, `--typography-xl`, `--typography-xxl`, `--typography-xxxl`
+- `scales.typography` → `--font-size-xs`, `--font-size-sm`, `--font-size-md`, `--font-size-lg`, `--font-size-xl`, `--font-size-xxl`, `--font-size-xxxl`
 - `scales.spacing` → `--spacing-xs`, `--spacing-sm`, `--spacing-md`, `--spacing-lg`, `--spacing-xl`, `--spacing-xxl`
 - `scales.radius` → `--radius-xs`, `--radius-sm`, `--radius-md`, `--radius-lg`, `--radius-xl`, `--radius-full`
+- `elevation` → `--elevation-subtle`, `--elevation-medium`, `--elevation-deep`
+- `border` → `--border-none`, `--border-hairline`, `--border-thin`, `--border-thick`
 
-For explicit (non-scale) tokens, use the full path flattened: `${typography.body.fontFamily}` → `--typography-body-fontfamily`.
+For explicit (non-scale) tokens, use the path flattened with dashes. Typography usage tokens drop the `typography` prefix for brevity: `${typography.body.fontFamily}` → `--body-fontfamily`, `${typography.heading.lineHeight}` → `--heading-lineheight`.
+
+Add utility classes for each elevation and border preset so they can be applied directly to any element:
+- `.elevation-{name}` applies the corresponding `box-shadow: var(--elevation-{name})`
+- `.border-{name}` applies the corresponding `border: var(--border-{name})`
 
 Every size unit must be expressed using the `rem` unit. This is super important and powerful because it allows to have a single media-query rule that will change the body font size at specific size (mobile, tablet, desktop) and every element size will follow in accordance because they use the `rem` unit.
 
