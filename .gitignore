@@ -45,5 +45,9 @@ recipes/speech-to-text/whisper-stt/whisper.cpp/
 # Local Documentation
 docs/
 
+# Test output
+test/
+!test/.gitkeep
+
 # Keep this file tracked
 !.gitignore

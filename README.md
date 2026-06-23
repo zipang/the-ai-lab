@@ -12,6 +12,7 @@ This section tracks all available recipes within the `recipes/` directory. A rec
 Templates and instructions for creating local Model Context Protocol (MCP) servers.
 *   **[Bun & TypeScript Template](./recipes/local-mcp-servers/bun-template/README.md)**: Quick-start template for building local MCP servers with Bun.
 *   **[Rust Filesystem MCP](./recipes/local-mcp-servers/rust-mcp-filesystem/README.md)**: A high-performance Rust implementation for filesystem operations.
+*   **[MCP Image Studio](./recipes/local-mcp-servers/mcp-image-studio/README.md)**: Multi-provider AI image generation via Vercel AI SDK with cost tracking — OpenAI, xAI Grok, Google Imagen, Fal.ai.
 *   **[MCP Inspector](./recipes/local-mcp-servers/mcp-inspector/README.md)**: Interactive debugger for testing and exploring MCP servers.
 
 ### 🎙️ Speech-to-Text (STT)
