@@ -24,6 +24,10 @@ Tools and skills to streamline development workflows.
 *   **[Git Commit Workflow](./recipes/workflows/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
 *   **[The Librarian](./recipes/workflows/the-librarian/README.md)**: Specialized sub-agent for local documentation indexing and management.
 
+### 🎨 Image Generation
+Professional AI image generation for marketing and storytelling.
+*   **[The Marketing Studio](./recipes/workflows/the-marketing-studio/README.md)**: Multi-agent pipeline for brand-aligned marketing visuals — Strategist → Art Director → Prompt Engineer.
+
 ---
 
 ## Project Organization
