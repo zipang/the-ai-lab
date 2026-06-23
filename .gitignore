@@ -12,6 +12,7 @@ node_modules/
 
 # Bundlers / Frameworks / Tooling caches
 .cache/
+.superpowers/
 
 # Logs
 logs/
