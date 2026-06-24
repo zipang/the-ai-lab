@@ -1,18 +1,13 @@
 {
   "name": "mcp-image-studio",
   "version": "1.0.0",
-  "description": "MCP server for multi-provider AI image generation with cost tracking — OpenAI, xAI Grok, Google, Fal.ai",
+  "description": "MCP server for AI image generation via AIML API",
   "type": "module",
   "scripts": {
-    "start": "bun src/index.ts"
+    "start": "bun src/index.ts",
+    "test": "bun test --env-file=.env.test"
   },
   "dependencies": {
-    "@ai-sdk/fal": "^2.0.0",
-    "@ai-sdk/google": "^3.0.0",
-    "@ai-sdk/openai": "^3.0.0",
-    "@ai-sdk/xai": "^3.0.0",
-    "@modelcontextprotocol/sdk": "latest",
-    "ai": "^6.0.0",
-    "zod": "latest"
+    "@modelcontextprotocol/sdk": "latest"
   }
 }

@@ -51,3 +51,4 @@ test/
 
 # Keep this file tracked
 !.gitignore
+\n# mcp-image-studio\nrecipes/local-mcp-servers/mcp-image-studio/.env.test
