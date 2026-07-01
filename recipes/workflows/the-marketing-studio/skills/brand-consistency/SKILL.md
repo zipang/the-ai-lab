@@ -5,6 +5,43 @@ description: Use when maintaining visual brand identity across a series of AI-ge
 
 # Brand Consistency Skill
 
+## 0. Using DESIGN.md as Brand Source of Truth
+
+When a `DESIGN.md` file exists in the project, it serves as the canonical source for brand identity tokens. Extract and lock these values before any generation. For the DESIGN.md format specification, refer to [The Designer recipe](../../the-designer/).
+
+### Token Mapping: DESIGN.md → Brand Tokens
+
+| DESIGN.md Field | Brand Token Category | How to Encode in Prompts |
+| :-------------- | :------------------- | :----------------------- |
+| `colors.primary` | Primary Colors | Lock hex value: "deep navy (#0A1628)" |
+| `colors.secondary` | Secondary Palette | Lock hex value: "slate grey (#6B7280)" |
+| `colors.tertiary` | Accent Colors | Lock hex value + usage rule: "gold (#F59E0B), used sparingly" |
+| `colors.neutral` | Background / Surface | Lock hex value: "warm beige (#F5F0EB)" |
+| `typography.body.fontFamily` | Body Typography | "body text in [font], clean sans-serif" |
+| `typography.heading.fontFamily` | Heading Typography | "headings in [font]" |
+| Additional `colors.*` | Extended Palette | Map any extra color tokens similarly |
+
+### Auto-Extraction Workflow
+
+```
+1. Locate the DESIGN.md file in the project root or theme directory
+2. Parse YAML front matter for `colors` and `typography` sections
+3. Map each token to the corresponding brand token category above
+4. If DESIGN.md includes `scales` → compute base sizes for reference
+5. If DESIGN.md includes `elevation` → map to visual depth cues
+6. Pass all extracted tokens into the prompt as locked values
+```
+
+### When DESIGN.md is Absent
+
+Fall back to manual brand token definition (Section 1). Ask the user for:
+- Primary brand color (hex)
+- Secondary/neutral colors (hex)
+- Accent color (hex)
+- Body font and heading font
+
+---
+
 ## Overview
 
 AI image generation is powerful but volatile — the same prompt can yield wildly different results across runs. This skill provides a system to **lock down brand identity** across an entire pipeline of generated assets so every output feels like it belongs to the same family.
