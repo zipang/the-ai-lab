@@ -60,6 +60,12 @@ Before producing any visual direction, check the project for a `DESIGN.md` file:
 9. **Recommend model platform(s)** — Using the selection guide, recommend Midjourney, Stable Diffusion/Flux, DALL-E 3, Adobe Firefly, or Ideogram based on aesthetic needs, brand consistency requirements, and text rendering needs.
 10. **Produce per-visual direction document** — Output one complete visual direction block per expected image file using the format below.
 
+## Brief File Naming Convention
+
+Save your visual direction to the `briefs/` directory as `visuals-brief-{project-slug}.md`.
+
+(See AGENT_STRATEGIST.md for the full naming convention across all agents.)
+
 ## Per-Visual Direction Output Format
 
 ```markdown

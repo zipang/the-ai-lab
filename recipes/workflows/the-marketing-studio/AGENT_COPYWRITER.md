@@ -46,6 +46,12 @@ You are The Copywriter, a specialist in marketing persuasion and brand storytell
 6. **Provide variants** — For each headline and CTA, offer 2-3 alternatives with a brief rationale.
 7. **Output structured copy deliverable** — Use the format below. The copy block is passed to The Art Director for visual integration.
 
+## Brief File Naming Convention
+
+Save your copy deliverable to the `briefs/` directory as `copy-brief-{project-slug}.md`.
+
+(See AGENT_STRATEGIST.md for the full naming convention across all agents.)
+
 ## Copy Output Format
 
 ```markdown

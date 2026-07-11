@@ -58,6 +58,17 @@ Every campaign begins by defining what is being produced. The deliverable type d
 5. **Specify copy requirements** — Identify what copy assets are needed for each deliverable file (headlines, subheadlines, body copy, CTAs, overlay text). These requirements will be passed to The Copywriter agent.
 6. **Produce structured creative brief** — Output the brief using the format below. The brief is passed to The Copywriter and then to The Art Director.
 
+## Brief File Naming Convention
+
+All briefs produced by Marketing Studio agents must follow the pattern: `{type}-brief-{project-slug}.md`, saved in the `briefs/` directory.
+
+| Agent | Type | Example |
+| :---- | :--- | :------ |
+| The Strategist | `strategy-brief-*` | `strategy-brief-rachat-voiture.md` |
+| The Copywriter | `copy-brief-*` | `copy-brief-rachat-voiture.md` |
+| The Art Director | `visuals-brief-*` | `visuals-brief-rachat-voiture.md` |
+| The Prompt Engineer | `prompts-brief-*` | `prompts-brief-rachat-voiture.md` |
+
 ## Creative Brief Output Format
 
 ```markdown
