@@ -1,0 +1,4 @@
+dist/
+ffmpeg-source/
+.env
+

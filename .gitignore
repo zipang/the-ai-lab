@@ -1,6 +1,11 @@
 # Node / JavaScript
 node_modules/
 
+# Local environment (secrets & machine-specific paths)
+.env
+.env.*
+!.env.sample
+
 # Bun (cache & temp)
 .bun/
 # Note: bun.lockb is usually committed to lock dependencies. Uncomment the next line to ignore it:
@@ -39,7 +44,7 @@ tmp/
 .gitmodules
 
 # Whisper artifacts
-recipes/speech-to-text/whisper-stt/whisper.cpp/
+tools/speech-to-text/whisper.cpp/
 *.wav
 
 # Local Documentation
@@ -51,4 +56,6 @@ test/
 
 # Keep this file tracked
 !.gitignore
-\n# mcp-image-studio\nrecipes/local-mcp-servers/mcp-image-studio/.env.test
+
+# mcp-image-studio
+tools/mcp-servers/mcp-image-studio/.env.test

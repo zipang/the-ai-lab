@@ -17,16 +17,20 @@ These skills will be crafted and tested repeatedly to be improved until a specif
 
 ## PROJECT ORGANIZATION
 
-This repository will contain multiple folders each dedicated to a specific user workflow with his choices of tools : web development, studies, day planning, etc...
-At the project's root we will maintain inside the README.md a directory of skills and MCP servers configuration recipes, ready to use inside a specific project.
+At the project's root we maintain inside the `README.md` a directory of recipes and tools, ready to use inside a specific project.
 
-A central directory  `recipes/` will contain individual recipes for a specific task. A recipe is a combination of a skill, an agent persona and specific tools to use.
+- **`recipes/`**: Deployable recipes. Each recipe is one directory — a bundle of agents, skills, and commands ready to copy into any project without renaming. Each recipe has its own `README.md` (intent, usage, references). See `recipes/AGENTS.md`.
+- **`tools/`**: Source-code tool projects used by the lab and by recipes (local MCP servers, speech-to-text). See `tools/AGENTS.md`.
+- **`docs/`**: Locally indexed tool documentation, maintained by The Librarian.
+- **`.opencode/`**: This lab's own live agent configuration (agents, skills, commands, instructions).
 
-Every new recipe should be tracked in the root README.md.
+Every new recipe is tracked in the root `README.md` and in `recipes/README.md`.
 
 ## CORE GUIDELINES
 
-- **Recipe Installation**: When deploying a recipe to a project, you MUST follow the specific installation instructions found in the main `README.md` file of this repository. Always prefer local configuration (e.g., `.opencode/` directory) to keep the project's root `AGENTS.md` clean.
+- **Recipe Installation**: When deploying a recipe to a project, you MUST follow the specific installation instructions found in the recipe's own `README.md`. Always prefer local configuration (`.opencode/` / `.agents/` directories) to keep the target project's root `AGENTS.md` clean.
+- **Deploy destinations**: agents → `.opencode/agents/`, skills → `.agents/skills/`, commands → `.opencode/commands/`. Skills use `.agents/skills/` because it is agent-agnostic (compatible with more tools) and equally supported by OpenCode.
+- **Ready-to-deploy**: Recipe files must be pre-named so a direct copy into the deploy destination requires no renaming.
 
 
 
@@ -108,9 +112,12 @@ Default section order:
 
 ## User Preferences
 
-When the user requests a durable behavior change, record it here or in the relevant child AGENTS.md
+- Skills are deployed to `.agents/skills/` (agent-agnostic, supported equally by OpenCode) rather than `.opencode/skills/`.
 
 ## Child DOX Index
 
-This project is not yet indexed. Before continuing you must scan the project, build the DOX tree and replace this message with the actual index. Go deep and scan files recursively to properly evaluate complexity and create nested DOX files where needed.
+- `recipes/AGENTS.md` — owns deployable recipes: structure (`agents/`, `skills/`, `commands/`), per-recipe README contract, and recipe index.
+- `tools/AGENTS.md` — owns source-code tool projects: category layout (`mcp-servers/`, `speech-to-text/`) and per-tool README install contracts.
+
+Everything else (`.opencode/` live config, `docs/` indexed documentation, root config files) stays owned by this root doc.
 
