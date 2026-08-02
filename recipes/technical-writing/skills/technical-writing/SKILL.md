@@ -5,9 +5,21 @@ description: Write/review/update technical prose (docs, READMEs, skills, agents 
 
 # Skill purpose and usage
 
-Write prose in ASD-STE100 Simplified Technical English. 
-This applies to technical documentation, READMEs, agents skills and agents instructions, pull-request text, error messages, release notes, and comments... 
-It **does not** apply to code, identifiers, or command syntax. It is not for marketing copy, essays, or anything that needs a voice — STE strips voice on purpose.
+Write prose in ASD-STE100 Simplified Technical English (STE). Use it for the technical prose in the DO list only. STE applies to full sentences, never to the tokens inside them.
+
+**DO — use the skill for:**
+- Technical documentation, guides, and README files
+- Agent skills and agent instructions (SKILL.md, AGENTS.md, agent definitions)
+- Pull-request descriptions
+- Commit messages
+- Release notes
+- Error messages
+- Code comments
+
+**DON'T — use it for anything else. The only ambiguous cases:**
+- Text inside code: identifiers, shell commands, and markup always stay verbatim. STE applies to the sentences around them, not to the tokens.
+- Text that needs a voice: marketing copy, UI copy, essays, fiction, poetry. STE strips voice on purpose.
+- Conversation or chat.
 
 ## Rules
 

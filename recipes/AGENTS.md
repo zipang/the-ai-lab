@@ -18,6 +18,7 @@ Holds deployable agent recipes. Each recipe is a self-contained bundle of agents
 - `agents/*.md` are pre-named to the deployed agent name (OpenCode uses the filename as the agent name). Direct copy into `.opencode/agents/`, no renames.
 - `skills/<name>/SKILL.md` follows one-folder-per-skill auto-discovery. Deployed to `.agents/skills/`.
 - `commands/<name>.md` maps one file per command. Deployed to `.opencode/commands/`.
+- A recipe that needs a skill or command owned by another recipe must reference that recipe instead of shipping its own copy.
 - Every recipe must be tracked in the root `README.md`.
 
 ## Child DOX Index

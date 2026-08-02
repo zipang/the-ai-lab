@@ -11,7 +11,7 @@ The agent operates inside the project's `design/` directory, where multiple desi
 
 ## Bundle
 
-The recipe ships one agent and six skills. Each theme directory holds the same set of files: `PRODUCT.md` (product, strategy, brand voice), `DESIGN.md` (the token foundation), `<theme>.css` (the stylesheet), an optional `guide/index.html` (the style guide), and `README.md`. `DESIGN.md` follows Google's [design.md](https://github.com/google-labs-code/design.md) spec.
+The recipe ships one agent and five skills. Each theme directory holds the same set of files: `PRODUCT.md` (product, strategy, brand voice), `DESIGN.md` (the token foundation), `<theme>.css` (the stylesheet), an optional `guide/index.html` (the style guide), and `README.md`. `DESIGN.md` follows Google's [design.md](https://github.com/google-labs-code/design.md) spec.
 
 | Component | Purpose | When the agent loads it |
 | :-------- | :------ | :---------------------- |
@@ -21,7 +21,8 @@ The recipe ships one agent and six skills. Each theme directory holds the same s
 | Skill `design-system-extract-from-reference` | Extract tokens from a live reference URL with `agent-browser` | When a site is used as inspiration |
 | Skill `impeccable` | Interactive refinement commands (polish, critique, audit, adapt, ...) | After the working directory is set |
 | Skill `agent-browser` | Browser automation CLI (dependency of extraction) | For any live-page interaction |
-| Skill `technical-writing` | Controlled technical English for the recipe's own docs | When updating this recipe |
+
+The `technical-writing` skill, used when updating this recipe, is provided by the standalone [`technical-writing`](../technical-writing/README.md) recipe.
 
 ## Usage
 
@@ -58,4 +59,5 @@ The agent proposes a plan, asks questions, and iterates on `DESIGN.md` and `<the
 | Skill | [`skills/design-system-extract-from-reference/`](./skills/design-system-extract-from-reference/SKILL.md) |
 | Skill | [`skills/impeccable/`](./skills/impeccable/SKILL.md) |
 | Skill | [`skills/agent-browser/`](./skills/agent-browser/SKILL.md) |
-| Skill | [`skills/technical-writing/`](./skills/technical-writing/SKILL.md) |
+
+The `technical-writing` skill is not shipped with this recipe. It comes from the [`technical-writing`](../technical-writing/README.md) recipe.
