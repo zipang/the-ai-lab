@@ -6,6 +6,9 @@ node_modules/
 .env.*
 !.env.sample
 
+# Local agent configuration (live .opencode/ deployments are untracked)
+.opencode/
+
 # Bun (cache & temp)
 .bun/
 # Note: bun.lockb is usually committed to lock dependencies. Uncomment the next line to ignore it:
