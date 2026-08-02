@@ -7,7 +7,7 @@ description: Use when maintaining visual brand identity across a series of AI-ge
 
 ## 0. Using DESIGN.md as Brand Source of Truth
 
-When a `DESIGN.md` file exists in the project, it serves as the canonical source for brand identity tokens. Extract and lock these values before any generation. For the DESIGN.md format specification, load the `design-file-specs` skill (shipped with The Designer recipe).
+When a `DESIGN.md` file exists in the project, it serves as the canonical source for brand identity tokens. Extract and lock these values before any generation.
 
 ### Token Mapping: DESIGN.md → Brand Tokens
 

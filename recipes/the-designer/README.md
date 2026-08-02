@@ -2,50 +2,60 @@
 
 ## Intent
 
-A local, autonomous alternative to services like [Google Stitch](https://stitch.withgoogle.com/). The Designer is a specialized agent that helps web developers create and maintain robust **Design Systems** and **Style Guides** directly inside their project, from a text description or a reference URL.
+A local, autonomous alternative to services like [Google Stitch](https://stitch.withgoogle.com/). The Designer is a specialized agent that helps web developers create and maintain design systems and style guides inside their project. It works from a text description or a reference URL.
 
-## Capabilities
+The agent operates inside the project's `design/` directory, where multiple design systems live in parallel:
 
-- **Automated Design Specification**: Generate comprehensive `DESIGN.md` files from user descriptions or by analyzing external reference URLs.
-- **Style Guide Generation**: Create an HTML Style Guide (`guide/index.html`) and stylesheet (`guide/theme.css`) exposing all theme tokens as CSS variables.
-- **Visual System Documentation**: Typography, UI components, elevation, borders, and layout, driven by computed token scales.
-- **Project Scaffolding**: Create the theme directory structure with a `README.md`.
+- `design/experiments/` — works directly linked to the current project.
+- `design/references/` — works unrelated to the project, used as inspiration.
+
+## Bundle
+
+The recipe ships one agent and six skills. Each theme directory holds the same set of files: `PRODUCT.md` (product, strategy, brand voice), `DESIGN.md` (the token foundation), `<theme>.css` (the stylesheet), an optional `guide/index.html` (the style guide), and `README.md`. `DESIGN.md` follows Google's [design.md](https://github.com/google-labs-code/design.md) spec.
+
+| Component | Purpose | When the agent loads it |
+| :-------- | :------ | :---------------------- |
+| Agent `the-designer` | Creates and refines design systems and style guides | Always |
+| Skill `design-system-tokens` | Token and `DESIGN.md` specification with reference files and presets | First, when authoring `DESIGN.md` or `<theme>.css` |
+| Skill `design-system-frontend` | Rules for authoring HTML and components with the theme tokens | When authoring HTML surfaces |
+| Skill `design-system-extract-from-reference` | Extract tokens from a live reference URL with `agent-browser` | When a site is used as inspiration |
+| Skill `impeccable` | Interactive refinement commands (polish, critique, audit, adapt, ...) | After the working directory is set |
+| Skill `agent-browser` | Browser automation CLI (dependency of extraction) | For any live-page interaction |
+| Skill `technical-writing` | Controlled technical English for the recipe's own docs | When updating this recipe |
 
 ## Usage
 
-### 1. Deploy the agent
+### 1. Install dependencies
 
-```bash
-mkdir -p .opencode/agents
-cp agents/the-designer.md .opencode/agents/
+- `bun` — runtime used to run the `impeccable` setup script and to serve style guides.
+- `node` — used by the `impeccable` skill setup.
+- `agent-browser` CLI — required only for the reference-extraction workflow:
+
+```sh
+bun add -g agent-browser
+agent-browser install   # Downloads Chrome from Chrome for Testing, first time only
 ```
 
-### 2. Deploy the skill
+Deployment of the agent and skills follows the process in the root `AGENTS.md` of this lab.
 
-The `design-file-specs` skill bundles the canonical DESIGN.md format reference used by the agent:
+### 2. Invoke the agent
 
-```bash
-mkdir -p .agents/skills
-cp -r skills/design-file-specs .agents/skills/
-```
+Start a session and select The Designer agent, then give it a brief:
 
-### 3. Verify dependencies
+- From scratch: "Create a new design system named 'OceanFlow' for a fintech dashboard."
+- From a reference: "Extract the design language from https://example.com and apply it to our landing page."
+- Update existing work: "Make the cards on the dashboard feel bolder and more distinctive."
 
-The agent uses `bun` to serve the style guide and `bunx @google/design.md lint` for validation. Ensure `bun` is installed.
-
-### 4. Invoke the agent
-
-1. Start a session and select `The Designer` agent.
-2. Provide a prompt, e.g.:
-   - "Create a new design system named 'OceanFlow' inspired by https://example.com"
-   - "I want a professional, high-contrast theme with blue accents and rounded buttons."
-3. Iterate: the agent asks questions and proposes changes to `DESIGN.md` and the Style Guide.
-4. Serve the guide with `bun path/to/theme/guide/index.html`.
+The agent proposes a plan, asks questions, and iterates on `DESIGN.md` and `<theme>.css`. It refines the surfaces with the `impeccable` commands and confirms before any destructive action.
 
 ## References
 
 | Component | Source |
 | :-------- | :----- |
 | Agent | [`agents/the-designer.md`](./agents/the-designer.md) |
-| Skill | [`skills/design-file-specs/`](./skills/design-file-specs/SKILL.md) |
-| Reference doc | [`skills/design-file-specs/references/design-file-specs.md`](./skills/design-file-specs/references/design-file-specs.md) |
+| Skill | [`skills/design-system-tokens/`](./skills/design-system-tokens/SKILL.md) |
+| Skill | [`skills/design-system-frontend/`](./skills/design-system-frontend/SKILL.md) |
+| Skill | [`skills/design-system-extract-from-reference/`](./skills/design-system-extract-from-reference/SKILL.md) |
+| Skill | [`skills/impeccable/`](./skills/impeccable/SKILL.md) |
+| Skill | [`skills/agent-browser/`](./skills/agent-browser/SKILL.md) |
+| Skill | [`skills/technical-writing/`](./skills/technical-writing/SKILL.md) |
