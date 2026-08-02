@@ -6,23 +6,14 @@ Enable browser automation for AI agents: navigating pages, filling forms, clicki
 
 ## Usage
 
-### 1. Deploy the skill
-
-Copy the skill directory so it is auto-discovered (no renaming needed):
-
-```bash
-mkdir -p .agents/skills
-cp -r skills/agent-browser .agents/skills/
-```
-
-### 2. Install the CLI
-
 The skill requires the `agent-browser` binary. Install it globally:
 
 ```sh
 bun add -g agent-browser
 agent-browser install  # Download Chrome from Chrome for Testing (first time only)
 ```
+
+Deployment of the skill follows the process in the root `AGENTS.md` of this lab.
 
 ## References
 

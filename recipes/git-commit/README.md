@@ -6,21 +6,9 @@ Standardize how the agent creates git commits: atomic, well-formatted commits wi
 
 ## Usage
 
-### 1. Deploy the skill
+Deployment of the skill and command follows the process in the root `AGENTS.md` of this lab.
 
-```bash
-mkdir -p .agents/skills
-cp -r skills/git-commit .agents/skills/
-```
-
-### 2. Deploy the command
-
-```bash
-mkdir -p .opencode/commands
-cp commands/commit.md .opencode/commands/
-```
-
-### 3. Configure custom instructions
+### 1. Configure custom instructions
 
 Add the rule to `.opencode/instructions.md` (registered in `opencode.json`):
 
@@ -36,7 +24,7 @@ If `opencode.json` doesn't exist, create it with:
 }
 ```
 
-### 4. Usage
+### 2. Usage
 
 Trigger the workflow by:
 - Using the `/commit` command (e.g., `/commit "update documentation"`)

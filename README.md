@@ -6,7 +6,7 @@ This repository is a laboratory for experimenting with tools, skills, and templa
 
 ## Available Recipes
 
-This section tracks all available recipes within the `recipes/` directory. A recipe is a deployable bundle of agents, skills, and commands. Each recipe's README explains its intent, usage, and references every component it contains. The installation instructions for each recipe are given in its own README. See [`recipes/README.md`](./recipes/README.md) for the full index.
+This section lists all available recipes within the `recipes/` directory. A recipe is a deployable bundle of agents, skills, and commands. Each recipe has its own README that explains its usage and installation.
 
 ### 🧩 Agents & Workflows
 
@@ -15,6 +15,27 @@ This section tracks all available recipes within the `recipes/` directory. A rec
 *   **[The Librarian](./recipes/the-librarian/README.md)**: Specialized sub-agent for local documentation indexing and management.
 *   **[Git Commit Workflow](./recipes/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
 *   **[Agent Browser](./recipes/agent-browser/README.md)**: Browser automation CLI for AI agents.
+*   **[Technical Writing](./recipes/technical-writing/README.md)**: Controlled technical English based on ASD-STE100 Simplified Technical English.
+
+## Deploying a Recipe
+
+A recipe deploys into a target project, not into this lab. The target project is the project where the agent, skills, or commands will run. Run every deploy command from the root of the target project. The recipe source lives in this lab under `recipes/<name>/`.
+
+| Component | Source (this lab) | Destination (target project) |
+| :-------- | :---------------- | :--------------------------- |
+| Agent | `recipes/<name>/agents/*.md` | `.opencode/agents/` |
+| Skill | `recipes/<name>/skills/<skill>/` | `.agents/skills/<skill>/` |
+| Command | `recipes/<name>/commands/*.md` | `.opencode/commands/` |
+
+Example: deploy the `technical-writing` recipe.
+
+```bash
+# Run from the root of the target project.
+mkdir -p .agents/skills
+cp -r <path-to-lab>/recipes/technical-writing/skills/* .agents/skills/
+```
+
+The recipe pre-names every file for its destination. A direct copy needs no renaming.
 
 ## Available Tools
 
@@ -46,7 +67,7 @@ The repository is organized by user workflows and technical capabilities:
 
 ## Contributing
 
-New recipes should be added as a directory in `recipes/` and tracked in the root `README.md` and in `recipes/README.md`. Each recipe should include:
+New recipes should be added as a directory in `recipes/` and tracked in the root `README.md`. Each recipe should include:
 1.  A dedicated folder in `recipes/`.
 2.  A `README.md` explaining the intent, usage, and a references table of every agent/skill/command it contains.
 3.  Its deployable components under `agents/`, `skills/`, and/or `commands/` (ready to copy without renaming).

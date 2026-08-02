@@ -45,23 +45,9 @@ Each agent reads the output of the previous one, refines it through its own skil
 
 ## Usage
 
-### 1. Deploy the agents
+Deployment of the agents and skills follows the process in the root `AGENTS.md` of this lab.
 
-```bash
-mkdir -p .opencode/agents
-cp agents/*.md .opencode/agents/
-```
-
-### 2. Deploy the skills
-
-```bash
-mkdir -p .agents/skills
-cp -r skills/* .agents/skills/
-```
-
-The skill directories are already structured for auto-discovery. No additional registration is needed.
-
-### 3. Configure instructions
+### 1. Configure instructions
 
 Add the following to `.opencode/instructions.md` to enable the pipeline:
 
@@ -69,7 +55,7 @@ Add the following to `.opencode/instructions.md` to enable the pipeline:
 **Marketing Studio**: Use the `the-marketing-studio` agent chain when the task involves marketing content production. Invoke agents in order: The Strategist → The Copywriter → The Art Director → The Prompt Engineer. The user acts as the final Brand Guardian.
 ```
 
-### 4. Invoke the pipeline
+### 2. Invoke the pipeline
 
 Mention the starting agent with your campaign brief:
 
@@ -83,7 +69,7 @@ You can also invoke a single agent for a focused task:
 
 > **@the-art-director** I need visual direction for a poster showing a runner on a mountain trail at golden hour.
 
-### 5. Brand identity
+### 3. Brand identity
 
 This recipe integrates with [The Designer recipe](../the-designer/README.md). The `DESIGN.md` file — produced by The Designer — serves as the canonical source of truth for brand identity across the pipeline. If your project has no `DESIGN.md` yet, invoke **@the-designer** to create one, or provide brand details directly when The Art Director asks.
 

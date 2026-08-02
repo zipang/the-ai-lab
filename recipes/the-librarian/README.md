@@ -13,14 +13,9 @@ A specialized agent that acts as the "keeper of truth" for tools documentation. 
 
 ## Usage
 
-### 1. Deploy the agent
+Deployment of the agent follows the process in the root `AGENTS.md` of this lab.
 
-```bash
-mkdir -p .opencode/agents
-cp agents/librarian.md .opencode/agents/
-```
-
-### 2. Invoke the agent
+Invoke the agent with a mission, for example:
 
 > "@librarian index the opencode documentation"
 > "@librarian update the latest bun version using https://bun.sh/llms.txt"

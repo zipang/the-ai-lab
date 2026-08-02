@@ -6,7 +6,7 @@ Holds deployable agent recipes. Each recipe is a self-contained bundle of agents
 
 ## Ownership
 
-- The lab maintains recipe structure, conventions, and the index in this `AGENTS.md` and `README.md`.
+- The lab maintains recipe structure and conventions in this `AGENTS.md`. Recipe tracking and the install process live in the root `README.md`.
 - Each recipe folder owns its own components and README.
 - Source-code tool projects (MCP servers, STT) are out of scope here — see `../tools/AGENTS.md`.
 
@@ -14,11 +14,11 @@ Holds deployable agent recipes. Each recipe is a self-contained bundle of agents
 
 - One recipe = one directory directly under `recipes/`.
 - A recipe may only contain these subdirectories: `agents/`, `skills/`, `commands/` (subset by content).
-- Each recipe has a `README.md` at its root stating intent, usage, and a references table of every agent/skill/command it contains.
+- Each recipe has a `README.md` at its root stating intent, a references table of every agent/skill/command it contains, and recipe-specific usage notes. The generic deploy process lives in the root `README.md` (`## Deploying a Recipe`). Do not repeat deploy commands in recipe READMEs.
 - `agents/*.md` are pre-named to the deployed agent name (OpenCode uses the filename as the agent name). Direct copy into `.opencode/agents/`, no renames.
 - `skills/<name>/SKILL.md` follows one-folder-per-skill auto-discovery. Deployed to `.agents/skills/`.
 - `commands/<name>.md` maps one file per command. Deployed to `.opencode/commands/`.
-- Every recipe must be tracked in the root `README.md` and in `recipes/README.md`.
+- Every recipe must be tracked in the root `README.md`.
 
 ## Child DOX Index
 

@@ -7,14 +7,6 @@ Depending on the task (coding, web development, studies, daily organization...) 
 The purpose of this repository is to identify, test and configure the best tools to go along with your preferred AI Agent (Opencode, Claude Code, ..) on a specific project.
 (due to its open source origin and allowing access to any LLM through multiple providers we have a preference for OpenCode but are ready to test the lab with other agents)
 
-## THE EXPERT
-
-You are an AI Prompt Engineer specialized in the confection of custom made prompts to optimize the precision and quality of the context given to a LLM for a dedicated task.
-And you are also an expert on the configuration of external tools that can execute dedicated actions on the machine where the agent is running : we talk of external and local MCP servers, 
-as well as creating new skills that will use these tools and coordinate specific agents for the task.
-You know a lot about the strength and weakness and of every major LLM on the market, as well as their price per token to establish the best ratio of price vs quality that will give a LLM the role for a specific task.
-These skills will be crafted and tested repeatedly to be improved until a specific task can be accomplished effortlessly with the best quality and speed of output.
-
 ## PROJECT ORGANIZATION
 
 At the project's root we maintain inside the `README.md` a directory of recipes and tools, ready to use inside a specific project.
@@ -22,13 +14,13 @@ At the project's root we maintain inside the `README.md` a directory of recipes 
 - **`recipes/`**: Deployable recipes. Each recipe is one directory — a bundle of agents, skills, and commands ready to copy into any project without renaming. Each recipe has its own `README.md` (intent, usage, references). See `recipes/AGENTS.md`.
 - **`tools/`**: Source-code tool projects used by the lab and by recipes (local MCP servers, speech-to-text). See `tools/AGENTS.md`.
 - **`docs/`**: Locally indexed tool documentation, maintained by The Librarian.
-- **`.opencode/`**: This lab's own live agent configuration (agents, skills, commands, instructions).
+- **`.opencode/`**: This lab's own live agent configuration (agents, skills, commands, instructions). It is local-only and not tracked in git; the canonical agent and skill sources live in `recipes/`.
 
-Every new recipe is tracked in the root `README.md` and in `recipes/README.md`.
+Every new recipe is tracked in the root `README.md`.
 
 ## CORE GUIDELINES
 
-- **Recipe Installation**: When deploying a recipe to a project, you MUST follow the specific installation instructions found in the recipe's own `README.md`. Always prefer local configuration (`.opencode/` / `.agents/` directories) to keep the target project's root `AGENTS.md` clean.
+- **Recipe Installation**: Deploy a recipe into a target project (not this lab) by copying its components into the target's local configuration. The full process is documented in the root `README.md` (`## Deploying a Recipe`). Always prefer local configuration (`.opencode/` / `.agents/` directories) to keep the target project's root `AGENTS.md` clean.
 - **Deploy destinations**: agents → `.opencode/agents/`, skills → `.agents/skills/`, commands → `.opencode/commands/`. Skills use `.agents/skills/` because it is agent-agnostic (compatible with more tools) and equally supported by OpenCode.
 - **Ready-to-deploy**: Recipe files must be pre-named so a direct copy into the deploy destination requires no renaming.
 
@@ -116,7 +108,7 @@ Default section order:
 
 ## Child DOX Index
 
-- `recipes/AGENTS.md` — owns deployable recipes: structure (`agents/`, `skills/`, `commands/`), per-recipe README contract, and recipe index.
+- `recipes/AGENTS.md` — owns deployable recipes: structure (`agents/`, `skills/`, `commands/`) and per-recipe README contract. Recipe tracking and install process live in the root `README.md`.
 - `tools/AGENTS.md` — owns source-code tool projects: category layout (`mcp-servers/`, `speech-to-text/`) and per-tool README install contracts.
 
 Everything else (`.opencode/` live config, `docs/` indexed documentation, root config files) stays owned by this root doc.
