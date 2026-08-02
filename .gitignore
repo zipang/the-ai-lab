@@ -6,8 +6,9 @@ node_modules/
 .env.*
 !.env.sample
 
-# Local agent configuration (live .opencode/ deployments are untracked)
+# Local agent configuration (live .opencode/ and .agents/ deployments are untracked)
 .opencode/
+.agents/
 
 # Local opencode config (machine-specific, untracked)
 opencode.json
