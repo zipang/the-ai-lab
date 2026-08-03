@@ -1,6 +1,6 @@
 ---
 name: index-tool-docs
-description: Use to create or reindex a local documentation mirror for a tool or library (e.g. "index the opencode docs", "update the local bun documentation", "reindex a tool documentation"). It runs the full Librarian workflow: discover the official source and version, acquire the raw markdown, normalize the local copy, build the index.md entry point, and advertise the documentation to the other agents. Load this skill on demand whenever the task is to create or reindex a documentation.
+description: Find, extract, download and index a local copy of a product documentation. Use this skill whenever the task is to create or reindex a documentation for the Librarian.
 version: 1.0.0
 ---
 
@@ -13,7 +13,7 @@ product documentation into a local mirror under `/docs/<tool> - <version>/`
 that the other agents can read instead of searching the web.
 
 Use this skill when the task is to create a new local documentation or to
-reindex an existing one after a version update.
+reindex an existing one after a version update (e.g. "index the opencode docs", "update the local bun documentation", "reindex a tool documentation").
 
 ## Workflow
 
