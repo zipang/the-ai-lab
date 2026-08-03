@@ -11,6 +11,14 @@ This repository is a laboratory to experiment with tools, skills, and templates,
 *   **`docs/`** — indexed tool documentation, maintained by The Librarian.
 *   **`AGENTS.md`** — detailed instructions and personas for the agents used in this lab.
 
+## How to install
+
+Copy and paste this prompt to let your agent install ai-lab in your project:
+
+```
+To install a recipe from ai-lab into your project, follow the instructions at https://github.com/zipang/the-ai-lab/blob/master/README.md#deploying-a-recipe
+```
+
 ## 🧩 Recipes
 
 Each recipe has its own README that explains its usage and installation.
@@ -53,17 +61,14 @@ This method needs no local copy of the lab. OpenCode exposes the lab to the targ
    }
    ```
 
-   The `description` tells the agent when to use the reference. OpenCode clones the repository into its cache and makes it available as `@ai-lab`.
+The `description` tells the agent when to use the reference. OpenCode clones the repository into its cache and makes it available as `@ai-lab`.
+To make `@ai-lab` available in every project, add the same reference to the global config at `~/.config/opencode/opencode.json` instead of the project file.
 
-2. Ask the agent to deploy the recipe from the reference. Example:
+2. At any moment you can now ask your agent to deploy a recipe from the `@ai-lab` reference. Example:
 
    ```
    Install the technical-writing recipe from @ai-lab into this project.
    ```
-
-   The agent reads the pre-named files under `@ai-lab/recipes/technical-writing/` and copies them to the destinations in the table above. The agent creates destination folders as needed.
-
-To make `ai-lab` available in every project, add the same reference to the global config at `~/.config/opencode/opencode.json` instead of the project file.
 
 ### Method 2: Deploy from a local copy of the lab
 
