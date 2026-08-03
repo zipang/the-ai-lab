@@ -13,15 +13,23 @@ A specialized agent that acts as the "keeper of truth" for tools documentation. 
 
 ## Usage
 
-Deployment of the agent follows the process in the root `AGENTS.md` of this lab.
+Deployment of the agent and skills follows the process in the root `AGENTS.md` of this lab.
 
 Invoke the agent with a mission, for example:
 
 > "@librarian index the opencode documentation"
 > "@librarian update the latest bun version using https://bun.sh/llms.txt"
 
+The workflow skills load on demand:
+
+- `index-tool-docs` runs the full create/reindex workflow.
+- `fix-bun-docs` normalizes an acquired Bun mirror (removes the upstream
+  `Documentation Index` header and rewrites `/docs/...` links to relative).
+
 ## References
 
 | Component | Source |
 | :-------- | :----- |
 | Agent | [`agents/librarian.md`](./agents/librarian.md) |
+| Skill: index-tool-docs | [`skills/index-tool-docs/`](./skills/index-tool-docs/) |
+| Skill: fix-bun-docs | [`skills/fix-bun-docs/`](./skills/fix-bun-docs/) |
