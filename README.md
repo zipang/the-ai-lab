@@ -41,6 +41,7 @@ Install the ai-lab CLI into this project.
 3. Report how to use the command:
    /ai-lab install <recipe-name>
    /ai-lab remove <recipe-name>
+   /ai-lab push <recipe-name>
 ```
 
 ## 🧩 Recipes
@@ -53,7 +54,7 @@ Each recipe has its own README that explains its usage and installation.
 *   **[Git Commit Workflow](./recipes/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
 *   **[Agent Browser](./recipes/agent-browser/README.md)**: Browser automation CLI for AI agents.
 *   **[Technical Writing](./recipes/technical-writing/README.md)**: Controlled technical English based on ASD-STE100 Simplified Technical English.
-*   **[AI Lab CLI](./recipes/ai-lab/README.md)**: Install and remove other recipes with the `/ai-lab` command.
+*   **[AI Lab CLI](./recipes/ai-lab/README.md)**: Install, remove, and push other recipes with the `/ai-lab` command.
 
 Deploy a recipe into your project. See [Deploying a Recipe](#deploying-a-recipe).
 
@@ -61,7 +62,7 @@ Deploy a recipe into your project. See [Deploying a Recipe](#deploying-a-recipe)
 
 Deploy a recipe into a target project. The target project is where the agent, skills, or commands run. Run every deploy command from the root of the target project. The recipe source lives in this lab under `recipes/<name>/`.
 
-The preferred way is the `/ai-lab` command. It works in any project that has the `@ai-lab` reference and the ai-lab CLI installed (see [How to install](#how-to-install)). Use `/ai-lab install <recipe-name>` to deploy and `/ai-lab remove <recipe-name>` to remove a recipe. The methods below describe the underlying mechanics that the command automates.
+The preferred way is the `/ai-lab` command. It works in any project that has the `@ai-lab` reference and the ai-lab CLI installed (see [How to install](#how-to-install)). Use `/ai-lab install <recipe-name>` to deploy, `/ai-lab remove <recipe-name>` to remove a recipe, and `/ai-lab push <recipe-name>` to send local recipe edits back to the lab. The methods below describe the underlying mechanics that the command automates.
 
 | Component | Source (this lab) | Destination (target project) |
 | :-------- | :---------------- | :--------------------------- |
