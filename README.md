@@ -34,6 +34,41 @@ Deploy a recipe into a target project. The target project is where the agent, sk
 | Skill | `recipes/<name>/skills/<skill>/` | `.agents/skills/<skill>/` |
 | Command | `recipes/<name>/commands/*.md` | `.opencode/commands/` |
 
+The recipe pre-names every file for its destination. A direct copy needs no renaming.
+
+### Method 1: Deploy from the Git repository (recommended)
+
+This method needs no local copy of the lab. OpenCode exposes the lab to the target project as a project reference.
+
+1. Add `ai-lab` as a project reference in the target project's `opencode.json`. Create the file if it does not exist.
+
+   ```json
+   {
+     "references": {
+       "ai-lab": {
+         "repository": "zipang/the-ai-lab",
+         "description": "Use to deploy recipes (agents, skills, and commands) from The AI Lab"
+       }
+     }
+   }
+   ```
+
+   The `description` tells the agent when to use the reference. OpenCode clones the repository into its cache and makes it available as `@ai-lab`.
+
+2. Ask the agent to deploy the recipe from the reference. Example:
+
+   ```
+   Install the technical-writing recipe from @ai-lab into this project.
+   ```
+
+   The agent reads the pre-named files under `@ai-lab/recipes/technical-writing/` and copies them to the destinations in the table above. The agent creates destination folders as needed.
+
+To make `ai-lab` available in every project, add the same reference to the global config at `~/.config/opencode/opencode.json` instead of the project file.
+
+### Method 2: Deploy from a local copy of the lab
+
+Use this method when you already have a checkout of the lab on disk.
+
 Example: deploy the `technical-writing` recipe.
 
 ```bash
@@ -42,13 +77,11 @@ mkdir -p .agents/skills
 cp -r <path-to-lab>/recipes/technical-writing/skills/* .agents/skills/
 ```
 
-The recipe pre-names every file for its destination. A direct copy needs no renaming.
-
 ## 🛠️ Local MCP Servers
 
-Source-code tool projects live in the `tools/` directory. See [`tools/`](./tools/) for details.
+Tools that require a local installation and build step to be installed. See [`tools/`](./tools/) for details.
 
 *   **[Bun & TypeScript Template](./tools/mcp-servers/bun-template/README.md)**: Quick-start template for building local MCP servers with Bun.
 *   **[Rust Filesystem MCP](./tools/mcp-servers/rust-mcp-filesystem/README.md)**: A high-performance Rust implementation for filesystem operations.
 *   **[MCP Inspector](./tools/mcp-servers/mcp-inspector/README.md)**: Interactive debugger for testing and exploring MCP servers.
-*   **MCP Image Studio** (`tools/mcp-servers/mcp-image-studio/`): Multi-provider AI image generation with cost tracking.
+*   **[Image Studio](`tools/mcp-servers/mcp-image-studio/`)**: Multi-provider AI image generation with cost tracking.
