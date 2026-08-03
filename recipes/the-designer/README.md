@@ -29,7 +29,6 @@ The `technical-writing` skill, used when updating this recipe, is provided by th
 ### 1. Install dependencies
 
 - `bun` — runtime used to run the `impeccable` setup script and to serve style guides.
-- `node` — used by the `impeccable` skill setup.
 - `agent-browser` CLI — required only for the reference-extraction workflow:
 
 ```sh
@@ -60,4 +59,4 @@ The agent proposes a plan, asks questions, and iterates on `DESIGN.md` and `<the
 | Skill | [`skills/impeccable/`](./skills/impeccable/SKILL.md) |
 | Skill | [`skills/agent-browser/`](./skills/agent-browser/SKILL.md) |
 
-The `technical-writing` skill is not shipped with this recipe. It comes from the [`technical-writing`](../technical-writing/README.md) recipe.
+The `technical-writing` skill is not part of this recipe. It comes from the [`ai-lab technical-writing`](@ai-lab/recipes/technical-writing/).

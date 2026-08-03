@@ -20,6 +20,7 @@ Holds deployable agent recipes. Each recipe is a self-contained bundle of agents
 - `commands/<name>.md` maps one file per command. Deployed to `.opencode/commands/`.
 - A recipe that needs a skill or command owned by another recipe must reference that recipe instead of shipping its own copy.
 - Every recipe must be tracked in the root `README.md`.
+- The `ai-lab` recipe is the meta-recipe. Its `commands/ai-lab.md` installs and removes the other recipes in a target project. It reads the `@ai-lab` reference, so that reference must be configured in the target project first.
 
 ## Child DOX Index
 

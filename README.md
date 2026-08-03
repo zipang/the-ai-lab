@@ -13,10 +13,34 @@ This repository is a laboratory to experiment with tools, skills, and templates,
 
 ## How to install
 
-Copy and paste this prompt to let your agent install ai-lab in your project:
+Copy and paste this prompt to let your agent install the ai-lab CLI in your project:
 
 ```
-To install a recipe from ai-lab into your project, follow the instructions at https://github.com/zipang/the-ai-lab/blob/master/README.md#deploying-a-recipe
+Install the ai-lab CLI into this project.
+
+1. Add the ai-lab reference to `opencode.json`. Create the file if it does not exist.
+   Use this configuration:
+
+   {
+     "references": {
+       "ai-lab": {
+         "repository": "zipang/the-ai-lab",
+         "description": "Use to deploy recipes (agents, skills, and commands) from The AI Lab"
+       }
+     }
+   }
+
+   The `description` is required. It tells the agent when to use the reference
+   and gives the agent access to the resolved reference path.
+
+2. Copy the command from `@ai-lab/recipes/ai-lab/commands/ai-lab.md` into
+   `.opencode/commands/ai-lab.md`. If `@ai-lab` is not available yet, fetch the
+   file from https://raw.githubusercontent.com/zipang/the-ai-lab/master/recipes/ai-lab/commands/ai-lab.md
+   and write it to that path.
+
+3. Report how to use the command:
+   /ai-lab install <recipe-name>
+   /ai-lab remove <recipe-name>
 ```
 
 ## 🧩 Recipes
@@ -29,12 +53,15 @@ Each recipe has its own README that explains its usage and installation.
 *   **[Git Commit Workflow](./recipes/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
 *   **[Agent Browser](./recipes/agent-browser/README.md)**: Browser automation CLI for AI agents.
 *   **[Technical Writing](./recipes/technical-writing/README.md)**: Controlled technical English based on ASD-STE100 Simplified Technical English.
+*   **[AI Lab CLI](./recipes/ai-lab/README.md)**: Install and remove other recipes with the `/ai-lab` command.
 
 Deploy a recipe into your project. See [Deploying a Recipe](#deploying-a-recipe).
 
 ## Deploying a Recipe
 
 Deploy a recipe into a target project. The target project is where the agent, skills, or commands run. Run every deploy command from the root of the target project. The recipe source lives in this lab under `recipes/<name>/`.
+
+The preferred way is the `/ai-lab` command. It works in any project that has the `@ai-lab` reference and the ai-lab CLI installed (see [How to install](#how-to-install)). Use `/ai-lab install <recipe-name>` to deploy and `/ai-lab remove <recipe-name>` to remove a recipe. The methods below describe the underlying mechanics that the command automates.
 
 | Component | Source (this lab) | Destination (target project) |
 | :-------- | :---------------- | :--------------------------- |
@@ -69,6 +96,8 @@ To make `@ai-lab` available in every project, add the same reference to the glob
    ```
    Install the technical-writing recipe from @ai-lab into this project.
    ```
+
+   If the ai-lab CLI is installed, use `/ai-lab install technical-writing` instead.
 
 ### Method 2: Deploy from a local copy of the lab
 
