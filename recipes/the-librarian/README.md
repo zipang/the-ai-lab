@@ -11,6 +11,11 @@ A specialized agent that acts as the "keeper of truth" for tools documentation. 
 3. **Index**: Organize docs into `/docs/<tool> - <version>/` with an `index.md` entry point and a short chapter description per file.
 4. **Advertise**: Keep `.opencode/instructions.md` updated so other agents know about the locally indexed documentation.
 
+The agent runs in `mode: all`. The user can select it with `@librarian`, and
+other agents can delegate documentation tasks to it through the task tool.
+When another agent sends a mission, the Librarian runs the workflow for the
+requested set only, and reports the result back to that agent.
+
 ## Usage
 
 Deployment of the agent and skills follows the process in the root `AGENTS.md` of this lab.
