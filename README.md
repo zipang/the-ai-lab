@@ -22,6 +22,7 @@ Each recipe has its own README that explains its usage and installation.
 *   **[Agent Browser](./recipes/agent-browser/README.md)**: Browser automation CLI for AI agents.
 *   **[Technical Writing](./recipes/technical-writing/README.md)**: Controlled technical English based on ASD-STE100 Simplified Technical English.
 *   **[AI Lab CLI](./recipes/lab/README.md)**: Install, remove, and push other recipes with the `/lab` command.
+*   **[Vercel](./recipes/vercel/README.md)**: Vercel platform specialist. Task-oriented skills for the CLI, the AI SDK, and Serverless Functions.
 
 To deploy a recipe into your project you have two main options: 
 * deploy the recipe manually or tell your agent to follow the instructions : [Deploying a Recipe](#deploying-a-recipe).
