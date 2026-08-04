@@ -59,4 +59,4 @@ The agent proposes a plan, asks questions, and iterates on `DESIGN.md` and `<the
 | Skill | [`skills/impeccable/`](./skills/impeccable/SKILL.md) |
 | Skill | [`skills/agent-browser/`](./skills/agent-browser/SKILL.md) |
 
-The `technical-writing` skill is not part of this recipe. It comes from the [`ai-lab technical-writing`](@ai-lab/recipes/technical-writing/).
+The `technical-writing` skill is not part of this recipe. It comes from the [`the-ai-lab technical-writing`](@the-ai-lab/recipes/technical-writing/).

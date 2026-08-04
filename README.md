@@ -11,39 +11,6 @@ This repository is a laboratory to experiment with tools, skills, and templates,
 *   **`docs/`** — indexed tool documentation, maintained by The Librarian.
 *   **`AGENTS.md`** — detailed instructions and personas for the agents used in this lab.
 
-## How to install
-
-Copy and paste this prompt to let your agent install the ai-lab CLI in your project:
-
-```
-Install the ai-lab CLI into this project.
-
-1. Add the ai-lab reference to `opencode.json`. Create the file if it does not exist.
-   Use this configuration:
-
-   {
-     "references": {
-       "ai-lab": {
-         "repository": "zipang/the-ai-lab",
-         "description": "Use to deploy recipes (agents, skills, and commands) from The AI Lab"
-       }
-     }
-   }
-
-   The `description` is required. It tells the agent when to use the reference
-   and gives the agent access to the resolved reference path.
-
-2. Copy the command from `@ai-lab/recipes/ai-lab/commands/ai-lab.md` into
-   `.opencode/commands/ai-lab.md`. If `@ai-lab` is not available yet, fetch the
-   file from https://raw.githubusercontent.com/zipang/the-ai-lab/master/recipes/ai-lab/commands/ai-lab.md
-   and write it to that path.
-
-3. Report how to use the command:
-   /ai-lab install <recipe-name>
-   /ai-lab remove <recipe-name>
-   /ai-lab push <recipe-name>
-```
-
 ## 🧩 Recipes
 
 Each recipe has its own README that explains its usage and installation.
@@ -54,15 +21,17 @@ Each recipe has its own README that explains its usage and installation.
 *   **[Git Commit Workflow](./recipes/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
 *   **[Agent Browser](./recipes/agent-browser/README.md)**: Browser automation CLI for AI agents.
 *   **[Technical Writing](./recipes/technical-writing/README.md)**: Controlled technical English based on ASD-STE100 Simplified Technical English.
-*   **[AI Lab CLI](./recipes/ai-lab/README.md)**: Install, remove, and push other recipes with the `/ai-lab` command.
+*   **[AI Lab CLI](./recipes/lab/README.md)**: Install, remove, and push other recipes with the `/lab` command.
 
-Deploy a recipe into your project. See [Deploying a Recipe](#deploying-a-recipe).
+To deploy a recipe into your project you have two main options: 
+* deploy the recipe manually or tell your agent to follow the instructions : [Deploying a Recipe](#deploying-a-recipe).
+* install the /lab command to fully manage your recipes (install, remove) : 
 
 ## Deploying a Recipe
 
 Deploy a recipe into a target project. The target project is where the agent, skills, or commands run. Run every deploy command from the root of the target project. The recipe source lives in this lab under `recipes/<name>/`.
 
-The preferred way is the `/ai-lab` command. It works in any project that has the `@ai-lab` reference and the ai-lab CLI installed (see [How to install](#how-to-install)). Use `/ai-lab install <recipe-name>` to deploy, `/ai-lab remove <recipe-name>` to remove a recipe, and `/ai-lab push <recipe-name>` to send local recipe edits back to the lab. The methods below describe the underlying mechanics that the command automates.
+The preferred way is the `/lab` command. It works in any project that has the `@the-ai-lab` reference and the lab CLI installed (see [Install the /lab command](#install-the-lab-command)). Use `/lab install <recipe-name>` to deploy, `/lab remove <recipe-name>` to remove a recipe, and `/lab push <recipe-name>` to send local recipe edits back to the lab. The methods below describe the underlying mechanics that the command automates.
 
 | Component | Source (this lab) | Destination (target project) |
 | :-------- | :---------------- | :--------------------------- |
@@ -76,12 +45,12 @@ The recipe pre-names every file for its destination. A direct copy needs no rena
 
 This method needs no local copy of the lab. OpenCode exposes the lab to the target project as a project reference.
 
-1. Add `ai-lab` as a project reference in the target project's `opencode.json`. Create the file if it does not exist.
+1. Add `the-ai-lab` as a project reference in the target project's `opencode.json`. Create the file if it does not exist.
 
    ```json
    {
      "references": {
-       "ai-lab": {
+       "the-ai-lab": {
          "repository": "zipang/the-ai-lab",
          "description": "Use to deploy recipes (agents, skills, and commands) from The AI Lab"
        }
@@ -89,16 +58,16 @@ This method needs no local copy of the lab. OpenCode exposes the lab to the targ
    }
    ```
 
-The `description` tells the agent when to use the reference. OpenCode clones the repository into its cache and makes it available as `@ai-lab`.
-To make `@ai-lab` available in every project, add the same reference to the global config at `~/.config/opencode/opencode.json` instead of the project file.
+The `description` tells the agent when to use the reference. OpenCode clones the repository into its cache and makes it available as `@the-ai-lab`.
+To make `@the-ai-lab` available in every project, add the same reference to the global config at `~/.config/opencode/opencode.json` instead of the project file.
 
-2. At any moment you can now ask your agent to deploy a recipe from the `@ai-lab` reference. Example:
+2. At any moment you can now ask your agent to deploy a recipe from the `@the-ai-lab` reference. Example:
 
    ```
-   Install the technical-writing recipe from @ai-lab into this project.
+   Install the technical-writing recipe from @the-ai-lab into this project.
    ```
 
-   If the ai-lab CLI is installed, use `/ai-lab install technical-writing` instead.
+   If the lab CLI is installed, use `/lab install technical-writing` instead.
 
 ### Method 2: Deploy from a local copy of the lab
 
@@ -110,6 +79,39 @@ Example: deploy the `technical-writing` recipe.
 # Run from the root of the target project.
 mkdir -p .agents/skills
 cp -r <path-to-lab>/recipes/technical-writing/skills/* .agents/skills/
+```
+
+## Install the /lab command
+
+Copy and paste this prompt to let your agent install the lab CLI in your project:
+
+```
+Install the lab CLI from @the-ai-lab into this project.
+
+1. Add `the-ai-lab` as a reference in `opencode.json`. Create the file if it does not exist.
+   Use this configuration:
+
+   {
+     "references": {
+       "the-ai-lab": {
+         "repository": "zipang/the-ai-lab",
+         "description": "Use to deploy recipes (agents, skills, and commands) from The AI Lab"
+       }
+     }
+   }
+
+   The `description` is required. It tells the agent when to use the reference
+   and gives the agent access to the resolved reference path.
+
+2. Copy the command from `@the-ai-lab/recipes/lab/commands/lab.md` into
+   `.opencode/commands/lab.md`. If `@the-ai-lab` is not available yet, fetch the
+   file from https://raw.githubusercontent.com/zipang/the-ai-lab/master/recipes/lab/commands/lab.md
+   and write it to that path.
+
+3. Report how to use the command:
+   /lab install <recipe-name>
+   /lab remove <recipe-name>
+   /lab push <recipe-name>
 ```
 
 ## 🛠️ Local MCP Servers

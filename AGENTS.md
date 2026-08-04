@@ -8,7 +8,7 @@ Follow these rules on any task in this project.
 2. **Use the git-commit skill** for every commit. It produces conventional, atomic commit messages.
 3. **Use the technical-writing skill** for every document you write or edit. It enforces STE-flavored Simplified Technical English.
 4. **Follow the DOX framework** below. AGENTS.md files are binding work contracts for their subtrees.
-5. **Resolve `@ai-lab` as a self-reference.** This repository is the source of the `@ai-lab` reference. OpenCode cannot configure `@ai-lab` as a self-reference in this project's `opencode.json`. Treat any mention of `@ai-lab` in this project as a reference to this repository root. For example, `@ai-lab/recipes/<name>/` resolves to `recipes/<name>/`.
+5. **Resolve `@the-ai-lab` as a self-reference.** This repository is the source of the `@the-ai-lab` reference. OpenCode cannot configure `@the-ai-lab` as a self-reference in this project's `opencode.json`. Treat any mention of `@the-ai-lab` in this project as a reference to this repository root. For example, `@the-ai-lab/recipes/<name>/` resolves to `recipes/<name>/`.
 
 ## DOX Framework
 
