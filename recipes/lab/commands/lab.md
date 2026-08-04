@@ -8,26 +8,32 @@ Command syntax:
 ```
 /lab <action> <recipe-name>
 ```
-Where the <action> can be one of <install|remove|push>
+Where the `<action>` can be one of `<install|test|remove|push>`
 Extract first argument $1 as the action verb
 Extract the second argument $2 as the recipe name
 
-If the action verb is not one of the available actions (`install`, `remove`, nor `push`), infer the action from the whole sentence ($ARGUMENTS). For example, "install the agent-browser recipe" maps to `/lab install agent-browser`. If no action matches clearly, show the formal usage below and stop:
+If the action verb is not one of the available actions (`install`, `test`, `remove`, nor `push`), guess the action from the whole sentence ($ARGUMENTS). For example, "install the agent-browser recipe" maps to `/lab install agent-browser`. If no action matches clearly, show the formal usage below and stop:
 
 ```
+**USAGE:**
 /lab install <recipe-name>
+/lab test <recipe-name>
 /lab remove <recipe-name>
 /lab push <recipe-name>
 ```
 
-## Use the @the-ai-lab reference as the root to discover all recipes
+**IMPORTANT:** After running any of the `install`, `test`, `remove` action, the Opencode configuration will have changed and you must inform the user to restart Opencode to take the modifications into account.
 
-`@the-ai-lab` is a configured project reference (a Git repository or a local directory). 
+## Use @the-ai-lab reference as the root to discover all recipes
+
+`@the-ai-lab` should be a configured project reference (to a Git repository or a local directory). 
 Find its resolved filesystem path from the references in your system context. 
+
+**Special case:** You are **INSIDE** `the-ai-lab` repository. If the current project root name is `the-ai-lab` and it contains a `recipes/` directory then use `@the-ai-lab` as a reference to the current project root.
 
 All recipes live under `@the-ai-lab/recipes/<name>/`.
 
-If the `@the-ai-lab` reference is not configured, stop and explain how to add it to the project first then tell the user to reboot opencode:
+If the `@the-ai-lab` reference is not configured or is not the current project's root, stop and explain how to add it to the project first by adding these lines to the root `.opencode.json` file:
 
 ```json
 {
@@ -44,7 +50,7 @@ If the `@the-ai-lab` reference is not configured, stop and explain how to add it
 
 Here is how to map each recipe components to their path in the current project
 
-| Component | Source (in @the-ai-lab)              | Destination                |
+| Component | Source (in @the-ai-lab)          | Destination                |
 | :-------- | :------------------------------- | :------------------------- |
 | Agent     | `recipes/<name>/agents/*.md`     | `.opencode/agents/` |
 | Skill     | `recipes/<name>/skills/<skill>/` | `.agents/skills/<skill>/` |
@@ -60,12 +66,16 @@ Here is how to map each recipe components to their path in the current project
 4. Apply the extra configuration steps the README requires (for example adding a reference in `opencode.json`, updating `.opencode/instructions.md`, or installing a global binary). Explain each step before you run it.
 5. Report what you installed and what configuration you changed.
 
+### `test`
+
+This is based on the `install` action but with a slightly different behaviour : instead of *copying* the recipe files, we will instead *symlink* them to their recipe source.
+
 ### `remove`
 
-1. Check that `recipes/<name>/` exists in the `@the-ai-lab` reference. If no recipe name was provided, ask the user to select recipes from the available recipes under `recipes/` (multiple choices possible). If a provided recipe name does not exist, list the available recipes under `recipes/` and stop.
+1. Check that `recipes/<name>/` exists in the `@the-ai-lab` reference. If no recipe name was provided, ask the user to select recipes from the available recipes under `@the-ai-lab/recipes/` (multiple choices possible). If a provided recipe name does not exist, list the available recipes under `recipes/` and stop.
 2. For each recipe, read `@the-ai-lab/recipes/<name>/README.md`, then list the exact files you will delete (`.opencode/agents/<...>.md`, `.agents/skills/<skill>/`, `.opencode/commands/<...>.md`) and the configuration changes the README specifies.
 3. Confirm the removal plan with the user before deleting anything.
-4. Delete the files and revert the configuration changes.
+4. Delete the files (or the symbolic links) and revert the configuration changes.
 5. Report what you removed and what configuration you reverted.
 
 ### `push`
