@@ -213,7 +213,7 @@ At minimum two surfaces are required: `colors.surface.base` (exposed as `--color
 | `colors.surface.base` | `--color-surface` | Y | `#ffffff` | Default page / section background |
 | `colors.surface.alt` | `--color-surface-alt` | Y | `#fbfaf7` | Alternating section backgrounds |
 | `colors.surface.dark` | `--color-surface-dark` | N | `var(--color-text)` | Dark surfaces — footer, dark sections |
-| `colors.surface.card` | `--color-surface-card` | N | `var(--color-surface)` | Card surfaces |
+| `colors.surface.card` | `--color-surface-card` | N | `var(--color-surface)` | Card, forms surfaces |
 
 ## Color variants derivation
 
