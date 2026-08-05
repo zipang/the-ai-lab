@@ -9,7 +9,7 @@ Follow these rules on any task in this project.
 3. **Use the `git-commit` skill** for every commit. It produces conventional, atomic commit messages.
 4. **Use the `technical-writing` skill** for every document you write or edit. It enforces STE-flavored Simplified Technical English.
 5. **Resolve `@the-ai-lab` as a self-reference.** This repository is the source of the `@the-ai-lab` reference. OpenCode cannot configure `@the-ai-lab` as a self-reference in this project's `opencode.json`. Treat any mention of `@the-ai-lab` in this project as a reference to this repository root. For example, `@the-ai-lab/recipes/<name>/` resolves to `./recipes/<name>/`.
-6. **Manage recipes through the `manage-recipes` skill.** To install, test, remove, or push recipes from `@the-ai-lab`. If the recipe is not available install it from `@the-ai-lab/recipes/lab/skills/manage-recipes/` and use it with your `$ARGUMENTS` or prompt context. 
+6. **Manage recipes through the lab skills.** Use the `deploy-recipes` skill to install, test, or remove recipes from `@the-ai-lab`. Use the `manage-recipes` skill to create new ones or to improve existing ones with reusable scripts. If a skill is not available, install it from `@the-ai-lab/recipes/lab/skills/<skill>/` and use it with your `$ARGUMENTS` or prompt context. 
 7. **Follow the DOX framework** below. AGENTS.md files are binding work contracts for their subtrees.
 
 # DOX framework

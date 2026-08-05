@@ -20,9 +20,9 @@ This recipe depends on the [`the-librarian`](../the-librarian/README.md)
 recipe. Install it first. It provides the Librarian agent and the
 `index-tool-docs` skill that builds and advertises the local mirror.
 
-Load the `manage-recipes` skill from `@the-ai-lab/recipes/lab/skills/manage-recipes/` to install or remove recipes from `@the-ai-lab`. Use it with your `$ARGUMENTS` or prompt context. Install `the-librarian` first, then install `vercel`.
+Load the `deploy-recipes` skill from `@the-ai-lab/recipes/lab/skills/deploy-recipes/` to install or remove recipes from `@the-ai-lab`. Use it with your `$ARGUMENTS` or prompt context. Install `the-librarian` first, then install `vercel`.
 
-Auto-install of required recipes by the `manage-recipes` skill is a planned
+Auto-install of required recipes by the `deploy-recipes` skill is a planned
 follow-up. For now, install `the-librarian` before you install `vercel`.
 
 ## Local documentation
@@ -70,7 +70,7 @@ vercel login
 ### 2. Deploy the agent
 
 Deployment of the agent and skills follows the process in the root `AGENTS.md`
-of this lab. Load the `manage-recipes` skill from `@the-ai-lab/recipes/lab/skills/manage-recipes/` and use it to install the `vercel` recipe.
+of this lab. Load the `deploy-recipes` skill from `@the-ai-lab/recipes/lab/skills/deploy-recipes/` and use it to install the `vercel` recipe.
 
 ### 3. Invoke the agent
 

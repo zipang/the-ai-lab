@@ -21,18 +21,18 @@ Each recipe has its own README that explains its usage and installation.
 *   **[Git Commit Workflow](./recipes/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
 *   **[Agent Browser](./recipes/agent-browser/README.md)**: Browser automation CLI for AI agents.
 *   **[Technical Writing](./recipes/technical-writing/README.md)**: Controlled technical English based on ASD-STE100 Simplified Technical English.
-*   **[AI Lab CLI](./recipes/lab/README.md)**: Install, remove, and push other recipes with the `/lab` command.
+*   **[AI Lab](./recipes/lab/README.md)**: Create, install, test, remove, and improve recipes with the `/lab` command.
 *   **[Vercel](./recipes/vercel/README.md)**: Vercel platform specialist. Task-oriented skills for the CLI, the AI SDK, and Serverless Functions.
 
 To deploy a recipe into your project you have two main options: 
 * deploy the recipe manually or tell your agent to follow the instructions : [Deploying a Recipe](#deploying-a-recipe).
-* install the /lab command to fully manage your recipes (install, test, remove, push) :
+* install the /lab command to fully manage your recipes (install, test, remove, create, improve) :
 
 ## Deploying a Recipe
 
 Deploy a recipe into a target project. The target project is where the agent, skills, or commands run. Run every deploy command from the root of the target project. The recipe source lives in this lab under `recipes/<name>/`.
 
-The preferred way is the `/lab` command. It works in any project that has the `@the-ai-lab` reference and the `/lab` command installed (see [Install the /lab command](#install-the-lab-command)). The command loads the `manage-recipes` skill, which holds all the instructions to install, test, remove, and push recipes. Use `/lab install <recipe-name>` to deploy, `/lab test <recipe-name>` to symlink for testing, `/lab remove <recipe-name>` to remove a recipe, and `/lab push <recipe-name>` to send local recipe edits back to the lab. The methods below describe the underlying mechanics that the command automates.
+The preferred way is the `/lab` command. It works in any project that has the `@the-ai-lab` reference and the `/lab` command installed (see [Install the /lab command](#install-the-lab-command)). The command routes each action to the correct skill. It loads the `deploy-recipes` skill to install, test, or remove a recipe, and the `manage-recipes` skill to create a new one or to improve an existing one. The `deploy-recipes` skill ships reusable scripts that perform every file operation. Use `/lab install <recipe-name>` to deploy, `/lab test <recipe-name>` to symlink for testing, `/lab remove <recipe-name>` to remove a recipe, `/lab create <recipe-name>` to create a new recipe in the lab, and `/lab improve <recipe-name>` to add reusable scripts to a recipe. The methods below describe the underlying mechanics that the command automates.
 
 | Component | Source (this lab) | Destination (target project) |
 | :-------- | :---------------- | :--------------------------- |
@@ -109,15 +109,16 @@ Install the /lab command from @the-ai-lab into this project.
    file from https://raw.githubusercontent.com/zipang/the-ai-lab/master/recipes/lab/commands/lab.md
    and write it to that path.
 
-3. Copy the manage-recipes skill from `@the-ai-lab/recipes/lab/skills/manage-recipes/`
-   into `.agents/skills/manage-recipes/`. The command loads this skill to perform
-   its actions.
+3. Copy the skills from `@the-ai-lab/recipes/lab/skills/deploy-recipes/` and
+   `@the-ai-lab/recipes/lab/skills/manage-recipes/` into `.agents/skills/`.
+   The command routes each action to one of these skills to perform its work.
 
 4. Report how to use the command:
    /lab install <recipe-name>
    /lab test <recipe-name>
    /lab remove <recipe-name>
-   /lab push <recipe-name>
+   /lab create <recipe-name>
+   /lab improve <recipe-name>
 ```
 
 ## 🛠️ Local MCP Servers
