@@ -8,19 +8,18 @@ Holds deployable agent recipes. Each recipe is a self-contained bundle of agents
 
 - The lab maintains recipe structure and conventions in this `AGENTS.md`. Recipe tracking and the install process live in the root `README.md`.
 - Each recipe folder owns its own components and README.
-- Source-code tool projects (MCP servers, STT) are out of scope here — see `../tools/AGENTS.md`.
 
 ## Local Contracts
 
 - One recipe = one directory directly under `recipes/`.
 - A recipe may only contain these subdirectories: `agents/`, `skills/`, `commands/` (subset by content).
 - Each recipe has a `README.md` at its root stating intent, a references table of every agent/skill/command it contains, and recipe-specific usage notes. The generic deploy process lives in the root `README.md` (`## Deploying a Recipe`). Do not repeat deploy commands in recipe READMEs.
-- `agents/*.md` are pre-named to the deployed agent name (OpenCode uses the filename as the agent name). Direct copy into `.opencode/agents/`, no renames.
+- `agents/*.md` file names are are the deployed agent name (OpenCode uses the filename as the agent name). Direct copy into `.opencode/agents/`, no renames.
 - `skills/<name>/SKILL.md` follows one-folder-per-skill auto-discovery. Deployed to `.agents/skills/`.
 - `commands/<name>.md` maps one file per command. Deployed to `.opencode/commands/`.
 - A recipe that needs a skill or command owned by another recipe must reference that recipe instead of shipping its own copy.
 - Every recipe must be tracked in the root `README.md`.
-- The `lab` recipe is the meta-recipe. Its `commands/lab.md` installs, removes, and pushes updates for the other recipes in a target project. Push sends the local edits of an installed recipe back to the `@the-ai-lab` source: it opens a pull request for a Git repository reference, and copies the files back for a local directory reference. It reads the `@the-ai-lab` reference, so that reference must be configured in the target project first.
+- The `lab` recipe is the meta-recipe. Its `skills/manage-recipes/` skill holds the instructions to install, test, remove, and push the other recipes in a target project. Its `commands/lab.md` command is a thin prompt that loads the skill and passes its `$ARGUMENTS` to it. Push sends the local edits of an installed recipe back to the `@the-ai-lab` source: it opens a pull request for a Git repository reference, and copies the files back for a local directory reference. The skill reads the `@the-ai-lab` reference, so that reference must be configured in the target project first.
 
 ## Child DOX Index
 

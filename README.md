@@ -26,13 +26,13 @@ Each recipe has its own README that explains its usage and installation.
 
 To deploy a recipe into your project you have two main options: 
 * deploy the recipe manually or tell your agent to follow the instructions : [Deploying a Recipe](#deploying-a-recipe).
-* install the /lab command to fully manage your recipes (install, remove) : 
+* install the /lab command to fully manage your recipes (install, test, remove, push) :
 
 ## Deploying a Recipe
 
 Deploy a recipe into a target project. The target project is where the agent, skills, or commands run. Run every deploy command from the root of the target project. The recipe source lives in this lab under `recipes/<name>/`.
 
-The preferred way is the `/lab` command. It works in any project that has the `@the-ai-lab` reference and the lab CLI installed (see [Install the /lab command](#install-the-lab-command)). Use `/lab install <recipe-name>` to deploy, `/lab remove <recipe-name>` to remove a recipe, and `/lab push <recipe-name>` to send local recipe edits back to the lab. The methods below describe the underlying mechanics that the command automates.
+The preferred way is the `/lab` command. It works in any project that has the `@the-ai-lab` reference and the `/lab` command installed (see [Install the /lab command](#install-the-lab-command)). The command loads the `manage-recipes` skill, which holds all the instructions to install, test, remove, and push recipes. Use `/lab install <recipe-name>` to deploy, `/lab test <recipe-name>` to symlink for testing, `/lab remove <recipe-name>` to remove a recipe, and `/lab push <recipe-name>` to send local recipe edits back to the lab. The methods below describe the underlying mechanics that the command automates.
 
 | Component | Source (this lab) | Destination (target project) |
 | :-------- | :---------------- | :--------------------------- |
@@ -68,7 +68,7 @@ To make `@the-ai-lab` available in every project, add the same reference to the 
    Install the technical-writing recipe from @the-ai-lab into this project.
    ```
 
-   If the lab CLI is installed, use `/lab install technical-writing` instead.
+   If the `/lab` command is installed, use `/lab install technical-writing` instead.
 
 ### Method 2: Deploy from a local copy of the lab
 
@@ -84,10 +84,10 @@ cp -r <path-to-lab>/recipes/technical-writing/skills/* .agents/skills/
 
 ## Install the /lab command
 
-Copy and paste this prompt to let your agent install the lab CLI in your project:
+Copy and paste this prompt to let your agent install the `/lab` command in your project:
 
 ```
-Install the lab CLI from @the-ai-lab into this project.
+Install the /lab command from @the-ai-lab into this project.
 
 1. Add `the-ai-lab` as a reference in `opencode.json`. Create the file if it does not exist.
    Use this configuration:
@@ -109,8 +109,13 @@ Install the lab CLI from @the-ai-lab into this project.
    file from https://raw.githubusercontent.com/zipang/the-ai-lab/master/recipes/lab/commands/lab.md
    and write it to that path.
 
-3. Report how to use the command:
+3. Copy the manage-recipes skill from `@the-ai-lab/recipes/lab/skills/manage-recipes/`
+   into `.agents/skills/manage-recipes/`. The command loads this skill to perform
+   its actions.
+
+4. Report how to use the command:
    /lab install <recipe-name>
+   /lab test <recipe-name>
    /lab remove <recipe-name>
    /lab push <recipe-name>
 ```
