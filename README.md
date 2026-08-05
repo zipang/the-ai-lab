@@ -13,7 +13,7 @@ This repository is a laboratory to experiment with tools, skills, and templates,
 
 ## 🧩 Recipes
 
-Each recipe has its own README that explains its usage and installation.
+Each recipe has its own README that states its intent, usage examples, and components.
 
 *   **[The Marketing Studio](./recipes/the-marketing-studio/README.md)**: Multi-agent pipeline for brand-aligned marketing visuals.
 *   **[The Designer](./recipes/the-designer/README.md)**: Local, autonomous design systems and style guides.

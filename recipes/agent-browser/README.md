@@ -1,22 +1,28 @@
-# Agent Browser
+# Agent Browser (@the-ai-lab/recipes/agent-browser)
 
-## Intent
-
-Enable browser automation for AI agents: navigating pages, filling forms, clicking buttons, taking screenshots, extracting data, testing web apps, and automating any browser task (including Electron desktop apps, Slack, and cloud browsers). Ships as a skill that drives the fast native Rust `agent-browser` CLI.
+This recipe contains one skill. It drives the native Rust `agent-browser` CLI from the agent.
+Use it to navigate pages, fill forms, click buttons, take screenshots, extract data, and
+automate any browser task, including Electron desktop apps and cloud browsers.
 
 ## Usage
 
-The skill requires the `agent-browser` binary. Install it globally:
+Ask the agent to drive the browser:
 
-```sh
-bun add -g agent-browser
-agent-browser install  # Download Chrome from Chrome for Testing (first time only)
-```
+- "Open https://example.com and take a screenshot."
+- "Fill the login form on this page with these values."
+- "Scrape the product list from the catalog page."
 
-Deployment of the skill follows the process in the root `AGENTS.md` of this lab.
-
-## References
+## Content
 
 | Component | Source |
 | :-------- | :----- |
-| Skill | [`skills/agent-browser/`](./skills/agent-browser/SKILL.md) |
+| Skill | [`agent-browser`](./skills/agent-browser/SKILL.md) |
+
+## Dependencies
+
+This recipe requires the `agent-browser` binary. Install it globally and download Chrome once:
+
+```sh
+bun add -g agent-browser
+agent-browser install
+```
