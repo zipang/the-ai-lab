@@ -1,6 +1,6 @@
 ---
 name: technical-writing
-description: Write/review/update technical prose (docs, READMEs, skills, agents intructions, PR descriptions,  — never code) into ASD-STE100 Simplified Technical English to remove "AI slop". Use the skill when asked to enforce a controlled writing style, e.g. create technical writing, avoid AI slop, make docs clear or plain, write technical documentation that reads human. 
+description: Write/review/update technical prose (docs, READMEs, skills, agents intructions, PR descriptions,  — never code) into Simplified Technical English (STE) to remove ambiguities. Use the skill when asked to enforce a controlled writing style, e.g. "apply STE", "clarify these docs", "write technical documentation for topic". 
 ---
 
 # Skill purpose and usage

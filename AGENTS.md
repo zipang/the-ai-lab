@@ -71,7 +71,7 @@ Default section order:
 
 ## Style
 
-- Keep docs concise, current, and operational
+- Keep docs concise, current, and operational with the STE skill
 - Document stable contracts, not diary entries
 - Put broad rules in parent docs and concrete details in child docs
 - Prefer direct bullets with explicit names
