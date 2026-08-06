@@ -30,6 +30,10 @@ This recipe depends on the [`the-librarian`](../the-librarian/README.md) recipe.
 first; it provides the Librarian agent and the `index-tool-docs` skill that builds and
 advertises the local documentation mirror.
 
+This recipe also depends on the [`agent-browser`](../agent-browser/README.md) recipe. Install
+it when you need to verify deployments in a real browser. It provides the `agent-browser`
+skill that drives the native Rust CLI for browser automation.
+
 This recipe also requires the Vercel CLI globally:
 
 ```sh

@@ -11,6 +11,24 @@ Follow these rules on any task in this project.
 5. **Resolve `@the-ai-lab` as a self-reference.** This repository is the source of the `@the-ai-lab` reference. OpenCode cannot configure `@the-ai-lab` as a self-reference in this project's `opencode.json`. Treat any mention of `@the-ai-lab` in this project as a reference to this repository root. For example, `@the-ai-lab/recipes/<name>/` resolves to `./recipes/<name>/`.
 6. **Manage recipes through the lab skills.** Use the `deploy-recipes` skill to install, test, or remove recipes from `@the-ai-lab`. Use the `manage-recipes` skill to create new ones or to improve existing ones with reusable scripts. If a skill is not available, install it from `@the-ai-lab/recipes/lab/skills/<skill>/` and use it with your `$ARGUMENTS` or prompt context. 
 7. **Follow the DOX framework** below. AGENTS.md files are binding work contracts for their subtrees.
+8. **Check agent automation readiness.** When the user needs agent automation, check that the project root is initialized with the `agent-browser` skill and that the main AGENTS.md contains the agent-browser block in this file. The skill lives at `.agents/skills/agent-browser/`. Re-install it from `@the-ai-lab/recipes/agent-browser/` when it is missing.
+
+## Agent automation
+
+This project drives browsers through the `agent-browser` skill. The skill loads the workflow
+content from the installed CLI. Use it for navigation, form filling, screenshots, scraping,
+Electron apps, and cloud browsers.
+
+The project root must stay initialized with this skill. The root contains:
+
+- the skill at `.agents/skills/agent-browser/SKILL.md`
+- the global binary installed with `bun add -g agent-browser`
+- Chrome for Testing installed with `agent-browser install`
+
+Before a browser task, run `agent-browser doctor` when the environment seems broken. Load the
+`agent-browser` skill before any browser automation task, and load the per-task guide from the
+CLI with `agent-browser skills get core` (or the specialized skills: `electron`, `slack`,
+`dogfood`, `derive-client`, `vercel-sandbox`, `agentcore`).
 
 # DOX framework
 
