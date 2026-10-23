@@ -1,0 +1,6 @@
+[fmt]
+useTabs = true
+ignorePatterns = [
+	"recipes/use-bun/skills/use-bun/references/",
+	"recipes/use-bun/skills/use-bun/SKILL.md",
+]

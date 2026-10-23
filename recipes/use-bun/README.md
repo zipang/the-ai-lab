@@ -30,7 +30,71 @@ bun .agents/skills/use-bun/scripts/update.ts --check  # CI: fail when stale
 
 The updater also syncs the managed `AGENTS.md` block between
 `<!-- the-ai-lab:use-bun:start -->` and `<!-- the-ai-lab:use-bun:end -->`
-markers. To deploy this recipe without the `@the-ai-lab` reference, fetch this
+markers.
+
+### Format on save
+
+Add the `formatter` block to the project `opencode.json` so OpenCode formats
+every file its `write`, `edit`, or `patch` tools change. The block replaces the
+Prettier, oxfmt, and Biome built-ins with `bun fmt`:
+
+```jsonc
+{
+	"$schema": "https://opencode.ai/config.json",
+	"formatter": {
+		"bun-fmt": {
+			"command": ["bun", "fmt", "$FILE"],
+			"extensions": [
+				".js",
+				".jsx",
+				".mjs",
+				".cjs",
+				".ts",
+				".tsx",
+				".mts",
+				".cts",
+				".css",
+				".json",
+				".jsonc",
+				".yaml",
+				".yml",
+				".md",
+				".mdx",
+				".html",
+			],
+		},
+		"prettier": { "disabled": true },
+		"oxfmt": { "disabled": true },
+		"biome": { "disabled": true },
+	},
+}
+```
+
+Set the style options in `bunfig.toml` (`bun fmt --init` creates the section,
+[Prettier option names](https://prettier.io/docs/options) apply):
+
+```toml
+[fmt]
+useTabs = true
+```
+
+### Pre-commit hook for editor saves
+
+OpenCode covers agent saves only. To format the files you save from your own
+editor, add a pre-commit hook that formats and re-stages the staged files
+(`bun fmt --staged`). Commit the hook so every contributor gets it:
+
+```bash
+mkdir -p .githooks
+printf '#!/bin/sh\nbun fmt --staged\n' > .githooks/pre-commit
+chmod +x .githooks/pre-commit
+git config core.hooksPath .githooks
+```
+
+Then commit the `.githooks/` directory. The hook blocks a commit when `bun fmt`
+exits with an error, for example a syntax error in a staged file.
+
+To deploy this recipe without the `@the-ai-lab` reference, fetch this
 README from
 `https://raw.githubusercontent.com/zipang/the-ai-lab/master/recipes/use-bun/README.md`
 and follow the install steps in the root README section
@@ -38,9 +102,9 @@ and follow the install steps in the root README section
 
 ## Content
 
-| Component | Source |
-| :-------- | :----- |
-| Skill | [`use-bun`](./skills/use-bun/SKILL.md) |
+| Component | Source                                 |
+| :-------- | :------------------------------------- |
+| Skill     | [`use-bun`](./skills/use-bun/SKILL.md) |
 
 ## Dependencies
 

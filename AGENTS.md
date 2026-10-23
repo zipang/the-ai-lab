@@ -9,7 +9,7 @@ Follow these rules on any task in this project.
 3. **Use the `git-commit` skill** for every commit. It produces conventional, atomic commit messages.
 4. **Use the `technical-writing` skill** for every document you write or edit. It enforces STE-flavored Simplified Technical English.
 5. **Resolve `@the-ai-lab` as a self-reference.** This repository is the source of the `@the-ai-lab` reference. OpenCode cannot configure `@the-ai-lab` as a self-reference in this project's `opencode.json`. Treat any mention of `@the-ai-lab` in this project as a reference to this repository root. For example, `@the-ai-lab/recipes/<name>/` resolves to `./recipes/<name>/`.
-6. **Manage recipes through the lab skills.** Use the `deploy-recipes` skill to install, test, or remove recipes from `@the-ai-lab`. Use the `manage-recipes` skill to create new ones or to improve existing ones with reusable scripts. If a skill is not available, install it from `@the-ai-lab/recipes/lab/skills/<skill>/` and use it with your `$ARGUMENTS` or prompt context. 
+6. **Manage recipes through the lab skills.** Use the `deploy-recipes` skill to install, test, or remove recipes from `@the-ai-lab`. Use the `manage-recipes` skill to create new ones or to improve existing ones with reusable scripts. If a skill is not available, install it from `@the-ai-lab/recipes/lab/skills/<skill>/` and use it with your `$ARGUMENTS` or prompt context.
 7. **Follow the DOX framework** below. AGENTS.md files are binding work contracts for their subtrees.
 8. **Check agent automation readiness.** When the user needs agent automation, check that the project root is initialized with the `agent-browser` skill and that the main AGENTS.md contains the agent-browser block in this file. The skill lives at `.agents/skills/agent-browser/`. Re-install it from `@the-ai-lab/recipes/agent-browser/` when it is missing.
 
@@ -80,6 +80,7 @@ Update parent docs when parent-level structure, ownership, workflow, or child in
 - Verification must reflect an existing check; if no verification framework exists yet, leave it empty and update it when one exists
 
 Default section order:
+
 - Purpose
 - Ownership
 - Local Contracts
@@ -117,6 +118,7 @@ When the user requests a durable behavior change, record it here or in the relev
 - Root-owned files: Everything else (`.opencode/`, `docs/`, root config files) stays owned by this root doc.
 
 <!-- the-ai-lab:use-bun:start -->
+
 ## Bun tooling (the-ai-lab)
 
 Bun is the all-in-one JavaScript/TypeScript toolkit for this project. Before any
@@ -127,6 +129,7 @@ JS/TS tooling decision — dependencies, scripts, builds, tests, CI — load the
 - Run TypeScript directly with `bun run`; type-check with `bun check`.
 - Replace `tsc`, ESLint, Prettier, Jest/Vitest, Vite, tsx, nodemon, and dotenv
   with the Bun built-ins listed in the skill's replacement table.
+- Format with `bun fmt` (OpenCode formats on save; `bun fmt --check` gates CI).
 - Do not add a package or a config file that covers a built-in Bun feature.
 
 _Maintained by the `use-bun` skill · Bun v1.4.4 · updated 2026-10-23. Run `bun .agents/skills/use-bun/scripts/update.ts` to refresh._

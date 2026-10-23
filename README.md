@@ -6,28 +6,29 @@ This repository is a laboratory to experiment with tools, skills, and templates,
 
 ## What's inside
 
-*   **`recipes/`** — deployable bundles of agents, skills, and commands. One directory per recipe, ready to copy into any project without renaming.
-*   **`tools/`** — source-code tool projects used by the lab and by recipes (MCP servers).
-*   **`docs/`** — indexed tool documentation, maintained by The Librarian.
-*   **`AGENTS.md`** — detailed instructions and personas for the agents used in this lab.
+- **`recipes/`** — deployable bundles of agents, skills, and commands. One directory per recipe, ready to copy into any project without renaming.
+- **`tools/`** — source-code tool projects used by the lab and by recipes (MCP servers).
+- **`docs/`** — indexed tool documentation, maintained by The Librarian.
+- **`AGENTS.md`** — detailed instructions and personas for the agents used in this lab.
 
 ## 🧩 Recipes
 
 Each recipe has its own README that states its intent, usage examples, and components.
 
-*   **[The Marketing Studio](./recipes/the-marketing-studio/README.md)**: Multi-agent pipeline for brand-aligned marketing visuals.
-*   **[The Designer](./recipes/the-designer/README.md)**: Local, autonomous design systems and style guides.
-*   **[The Librarian](./recipes/the-librarian/README.md)**: Specialized sub-agent for local documentation indexing and management.
-*   **[Git Commit Workflow](./recipes/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
-*   **[Agent Browser](./recipes/agent-browser/README.md)**: Browser automation CLI for AI agents.
-*   **[Technical Writing](./recipes/technical-writing/README.md)**: Controlled technical English based on ASD-STE100 Simplified Technical English.
-*   **[Use Bun](./recipes/use-bun/README.md)**: Always-fresh Bun documentation skill that replaces npm, tsc, ESLint, Prettier, Jest, and Vite habits with Bun built-ins.
-*   **[AI Lab](./recipes/lab/README.md)**: Create, install, test, remove, and improve recipes with the `/lab` command.
-*   **[Vercel](./recipes/vercel/README.md)**: Vercel platform specialist. Task-oriented skills for the CLI, the AI SDK, and Serverless Functions.
+- **[The Marketing Studio](./recipes/the-marketing-studio/README.md)**: Multi-agent pipeline for brand-aligned marketing visuals.
+- **[The Designer](./recipes/the-designer/README.md)**: Local, autonomous design systems and style guides.
+- **[The Librarian](./recipes/the-librarian/README.md)**: Specialized sub-agent for local documentation indexing and management.
+- **[Git Commit Workflow](./recipes/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
+- **[Agent Browser](./recipes/agent-browser/README.md)**: Browser automation CLI for AI agents.
+- **[Technical Writing](./recipes/technical-writing/README.md)**: Controlled technical English based on ASD-STE100 Simplified Technical English.
+- **[Use Bun](./recipes/use-bun/README.md)**: Always-fresh Bun documentation skill that replaces npm, tsc, ESLint, Prettier, Jest, and Vite habits with Bun built-ins.
+- **[AI Lab](./recipes/lab/README.md)**: Create, install, test, remove, and improve recipes with the `/lab` command.
+- **[Vercel](./recipes/vercel/README.md)**: Vercel platform specialist. Task-oriented skills for the CLI, the AI SDK, and Serverless Functions.
 
-To deploy a recipe into your project you have two main options: 
-* deploy the recipe manually or tell your agent to follow the instructions : [Deploying a Recipe](#deploying-a-recipe).
-* install the /lab command to fully manage your recipes (install, test, remove, create, improve) :
+To deploy a recipe into your project you have two main options:
+
+- deploy the recipe manually or tell your agent to follow the instructions : [Deploying a Recipe](#deploying-a-recipe).
+- install the /lab command to fully manage your recipes (install, test, remove, create, improve) :
 
 ## Deploying a Recipe
 
@@ -35,11 +36,11 @@ Deploy a recipe into a target project. The target project is where the agent, sk
 
 The preferred way is the `/lab` command. It works in any project that has the `@the-ai-lab` reference and the `/lab` command installed (see [Install the /lab command](#install-the-lab-command)). The command routes each action to the correct skill. It loads the `deploy-recipes` skill to install, test, or remove a recipe, and the `manage-recipes` skill to create a new one or to improve an existing one. The `deploy-recipes` skill ships reusable scripts that perform every file operation. Use `/lab install <recipe-name>` to deploy, `/lab test <recipe-name>` to symlink for testing, `/lab remove <recipe-name>` to remove a recipe, `/lab create <recipe-name>` to create a new recipe in the lab, and `/lab improve <recipe-name>` to add reusable scripts to a recipe. The methods below describe the underlying mechanics that the command automates.
 
-| Component | Source (this lab) | Destination (target project) |
-| :-------- | :---------------- | :--------------------------- |
-| Agent | `recipes/<name>/agents/*.md` | `.opencode/agents/` |
-| Skill | `recipes/<name>/skills/<skill>/` | `.agents/skills/<skill>/` |
-| Command | `recipes/<name>/commands/*.md` | `.opencode/commands/` |
+| Component | Source (this lab)                | Destination (target project) |
+| :-------- | :------------------------------- | :--------------------------- |
+| Agent     | `recipes/<name>/agents/*.md`     | `.opencode/agents/`          |
+| Skill     | `recipes/<name>/skills/<skill>/` | `.agents/skills/<skill>/`    |
+| Command   | `recipes/<name>/commands/*.md`   | `.opencode/commands/`        |
 
 The recipe pre-names every file for its destination. A direct copy needs no renaming.
 
@@ -51,12 +52,12 @@ This method needs no local copy of the lab. OpenCode exposes the lab to the targ
 
    ```json
    {
-     "references": {
-       "the-ai-lab": {
-         "repository": "zipang/the-ai-lab",
-         "description": "Use to deploy recipes (agents, skills, and commands) from The AI Lab"
-       }
-     }
+   	"references": {
+   		"the-ai-lab": {
+   			"repository": "zipang/the-ai-lab",
+   			"description": "Use to deploy recipes (agents, skills, and commands) from The AI Lab"
+   		}
+   	}
    }
    ```
 
@@ -161,7 +162,12 @@ then:
    `<!-- the-ai-lab:use-bun:start -->` and `<!-- the-ai-lab:use-bun:end -->`
    markers; it creates `AGENTS.md` when the file does not exist).
 
-4. Restart OpenCode, then report how to use the skill and how to refresh the
+4. Apply the formatter configuration from the recipe README's Usage section:
+   add the `formatter` block (bun fmt on agent saves) to `opencode.json`, the
+   `bunfig.toml` `[fmt]` options, and the optional `.githooks/pre-commit` hook
+   that formats staged files with `bun fmt --staged`.
+
+5. Restart OpenCode, then report how to use the skill and how to refresh the
    indexes after each Bun release with the `--check` flag for CI.
 ```
 
@@ -172,7 +178,7 @@ If the `/lab` command is installed, replace steps 1 and 2 with
 
 Tools that require a local installation and build step to be installed. See [`tools/`](./tools/) for details.
 
-*   **[Bun & TypeScript Template](./tools/mcp-servers/bun-template/README.md)**: Quick-start template for building local MCP servers with Bun.
-*   **[Rust Filesystem MCP](./tools/mcp-servers/rust-mcp-filesystem/README.md)**: A high-performance Rust implementation for filesystem operations.
-*   **[MCP Inspector](./tools/mcp-servers/mcp-inspector/README.md)**: Interactive debugger for testing and exploring MCP servers.
-*   **[Image Studio](`tools/mcp-servers/mcp-image-studio/`)**: Multi-provider AI image generation with cost tracking.
+- **[Bun & TypeScript Template](./tools/mcp-servers/bun-template/README.md)**: Quick-start template for building local MCP servers with Bun.
+- **[Rust Filesystem MCP](./tools/mcp-servers/rust-mcp-filesystem/README.md)**: A high-performance Rust implementation for filesystem operations.
+- **[MCP Inspector](./tools/mcp-servers/mcp-inspector/README.md)**: Interactive debugger for testing and exploring MCP servers.
+- **[Image Studio](`tools/mcp-servers/mcp-image-studio/`)**: Multi-provider AI image generation with cost tracking.

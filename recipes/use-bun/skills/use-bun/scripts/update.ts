@@ -103,10 +103,16 @@ const BUCKETS: Bucket[] = [
 		id: "getting-started",
 		file: "getting-started.md",
 		title: "Getting started",
-		summary: "Installing Bun, scaffolding a project (`bun init`, `bun create`).",
+		summary:
+			"Installing Bun, scaffolding a project (`bun init`, `bun create`).",
 		blurb: "Installation, quickstart, and project templating.",
 		matches: anyOf(
-			equals("docs.md", "docs/index.md", "docs/installation.md", "docs/quickstart.md"),
+			equals(
+				"docs.md",
+				"docs/index.md",
+				"docs/installation.md",
+				"docs/quickstart.md",
+			),
 			startsWith("docs/runtime/templating/"),
 		),
 	},
@@ -180,7 +186,8 @@ const BUCKETS: Bucket[] = [
 		id: "guides",
 		file: "guides.md",
 		title: "Guides",
-		summary: "Task-oriented recipes: file conversions, HTTP patterns, ecosystems.",
+		summary:
+			"Task-oriented recipes: file conversions, HTTP patterns, ecosystems.",
 		blurb: "Step-by-step recipes from the official guides section.",
 		matches: startsWith("docs/guides/"),
 		groupByDirectory: true,
@@ -682,13 +689,7 @@ function renderAgentsBlock(
 ): string {
 	const footer = `_Maintained by the \`use-bun\` skill · Bun v${version} · updated ${updated}. Run \`bun ${SKILL_RELATIVE_DIR}/scripts/update.ts\` to refresh._`;
 
-	return [
-		AGENTS_START,
-		snippet.trim(),
-		"",
-		footer,
-		AGENTS_END,
-	].join("\n");
+	return [AGENTS_START, snippet.trim(), "", footer, AGENTS_END].join("\n");
 }
 
 /**
@@ -707,10 +708,16 @@ function upsertAgentsBlock(contents: string | null, block: string): string {
 	const end = contents.indexOf(AGENTS_END);
 
 	if (start !== -1 && end !== -1 && end > start) {
-		return contents.slice(0, start) + block + contents.slice(end + AGENTS_END.length);
+		return (
+			contents.slice(0, start) + block + contents.slice(end + AGENTS_END.length)
+		);
 	}
 
-	const separator = contents.endsWith("\n\n") ? "" : contents.endsWith("\n") ? "\n" : "\n\n";
+	const separator = contents.endsWith("\n\n")
+		? ""
+		: contents.endsWith("\n")
+			? "\n"
+			: "\n\n";
 
 	return contents.trimEnd() + separator + "\n" + block + "\n";
 }
@@ -718,6 +725,20 @@ function upsertAgentsBlock(contents: string | null, block: string): string {
 /* -------------------------------------------------------------------------- */
 /* Main                                                                       */
 /* -------------------------------------------------------------------------- */
+
+/**
+ * Removes blank lines so that formatter whitespace differences do not make a
+ * managed block look stale.
+ *
+ * @param text Markdown text.
+ * @returns Text with every blank line removed.
+ */
+function compressBlankLines(text: string): string {
+	return text
+		.split("\n")
+		.filter((line) => line.trim() !== "")
+		.join("\n");
+}
 
 /**
  * Rewrites (or verifies) the skill reference indexes and the AGENTS.md block.
@@ -814,7 +835,9 @@ async function main(): Promise<void> {
 		renderAgentsBlock(await snippetFile.text(), version, updated),
 	);
 
-	if (nextAgents !== agentsExisting) {
+	if (
+		compressBlankLines(nextAgents) !== compressBlankLines(agentsExisting ?? "")
+	) {
 		if (checkOnly) {
 			stale.push(AGENTS_PATH);
 		} else {
