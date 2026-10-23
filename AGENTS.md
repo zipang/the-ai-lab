@@ -115,3 +115,19 @@ When the user requests a durable behavior change, record it here or in the relev
 - `recipes/AGENTS.md` — deployable recipes: structure and per-recipe README contract.
 - `tools/AGENTS.md` — source-code tools: category layout and per-tool README contracts.
 - Root-owned files: Everything else (`.opencode/`, `docs/`, root config files) stays owned by this root doc.
+
+<!-- the-ai-lab:use-bun:start -->
+## Bun tooling (the-ai-lab)
+
+Bun is the all-in-one JavaScript/TypeScript toolkit for this project. Before any
+JS/TS tooling decision — dependencies, scripts, builds, tests, CI — load the
+`use-bun` skill at `.agents/skills/use-bun/SKILL.md` and follow it.
+
+- Use `bun` / `bunx` instead of `node` / `npm` / `npx` / `yarn` / `pnpm`.
+- Run TypeScript directly with `bun run`; type-check with `bun check`.
+- Replace `tsc`, ESLint, Prettier, Jest/Vitest, Vite, tsx, nodemon, and dotenv
+  with the Bun built-ins listed in the skill's replacement table.
+- Do not add a package or a config file that covers a built-in Bun feature.
+
+_Maintained by the `use-bun` skill · Bun v1.4.4 · updated 2026-10-23. Run `bun .agents/skills/use-bun/scripts/update.ts` to refresh._
+<!-- the-ai-lab:use-bun:end -->

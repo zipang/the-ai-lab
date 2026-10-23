@@ -20,6 +20,7 @@ Holds deployable agent recipes. Each recipe is a self-contained bundle of agents
   4. `## Content` — one table `| Component | Source |`. The Source link text is the component name only (for example, `[git-commit](./skills/git-commit/SKILL.md)`).
   5. `## Dependencies` — optional, present only when the recipe depends on another recipe or a global binary. State the dependency and the install step.
 - The generic deploy process lives in the root `README.md` (`## Deploying a Recipe`). Do not repeat deploy commands in recipe READMEs.
+- A recipe that configures the target project beyond the file copies (project `AGENTS.md` blocks, `opencode.json` references, global binaries) documents those extra steps in its README `## Usage` section, because the README must stay deployable from its raw GitHub URL.
 - Per-skill purpose, workflow, architecture, and "when the agent loads it" detail live in `SKILL.md`, not in the README.
 - `agents/*.md` file names are the deployed agent name (OpenCode uses the filename as the agent name). Direct copy into `.opencode/agents/`, no renames.
 - `skills/<name>/SKILL.md` follows one-folder-per-skill auto-discovery. Deployed to `.agents/skills/`.

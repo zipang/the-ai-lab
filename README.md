@@ -21,6 +21,7 @@ Each recipe has its own README that states its intent, usage examples, and compo
 *   **[Git Commit Workflow](./recipes/git-commit/README.md)**: Atomic, conventional commits with mandatory human-in-the-loop confirmation.
 *   **[Agent Browser](./recipes/agent-browser/README.md)**: Browser automation CLI for AI agents.
 *   **[Technical Writing](./recipes/technical-writing/README.md)**: Controlled technical English based on ASD-STE100 Simplified Technical English.
+*   **[Use Bun](./recipes/use-bun/README.md)**: Always-fresh Bun documentation skill that replaces npm, tsc, ESLint, Prettier, Jest, and Vite habits with Bun built-ins.
 *   **[AI Lab](./recipes/lab/README.md)**: Create, install, test, remove, and improve recipes with the `/lab` command.
 *   **[Vercel](./recipes/vercel/README.md)**: Vercel platform specialist. Task-oriented skills for the CLI, the AI SDK, and Serverless Functions.
 
@@ -120,6 +121,52 @@ Install the /lab command from @the-ai-lab into this project.
    /lab create <recipe-name>
    /lab improve <recipe-name>
 ```
+
+## Install the Use Bun recipe
+
+The `use-bun` skill keeps an always-fresh index of the official Bun
+documentation, split into per-domain references that the agent fetches on
+demand as Markdown from `bun.com`. A bundled updater script regenerates the
+indexes on every Bun release and writes a small "Bun tooling" block into the
+project's root `AGENTS.md`, so every session prefers Bun built-ins over npm,
+tsc, ESLint, Prettier, Jest, or Vite habits. It supersedes local Bun
+documentation mirrors such as the ones maintained by The Librarian.
+
+Copy and paste this prompt to let your agent install it:
+
+```
+Install the "Use Bun" recipe from @the-ai-lab into this project. Read the
+instructions at https://raw.githubusercontent.com/zipang/the-ai-lab/master/recipes/use-bun/README.md
+then:
+
+1. Add `the-ai-lab` as a reference in `opencode.json`. Create the file if it
+   does not exist. Use this configuration:
+
+   {
+     "references": {
+       "the-ai-lab": {
+         "repository": "zipang/the-ai-lab",
+         "description": "Use to deploy recipes (agents, skills, and commands) from The AI Lab"
+       }
+     }
+   }
+
+2. Copy the skill from `@the-ai-lab/recipes/use-bun/skills/use-bun/` into
+   `.agents/skills/`. If `@the-ai-lab` is not available yet, fetch the recipe
+   README above for the raw GitHub fallback files.
+
+3. Run `bun .agents/skills/use-bun/scripts/update.ts` from the project root.
+   It generates the documentation indexes from bun.com and adds the managed
+   "Bun tooling" block to the root `AGENTS.md` (between
+   `<!-- the-ai-lab:use-bun:start -->` and `<!-- the-ai-lab:use-bun:end -->`
+   markers; it creates `AGENTS.md` when the file does not exist).
+
+4. Restart OpenCode, then report how to use the skill and how to refresh the
+   indexes after each Bun release with the `--check` flag for CI.
+```
+
+If the `/lab` command is installed, replace steps 1 and 2 with
+`/lab install use-bun`, then run the updater script as in step 3.
 
 ## 🛠️ Local MCP Servers
 
