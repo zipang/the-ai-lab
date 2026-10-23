@@ -163,9 +163,12 @@ then:
    markers; it creates `AGENTS.md` when the file does not exist).
 
 4. Apply the formatter configuration from the recipe README's Usage section:
-   add the `formatter` block (bun fmt on agent saves) to `opencode.json`, the
-   `bunfig.toml` `[fmt]` options, and the optional `.githooks/pre-commit` hook
-   that formats staged files with `bun fmt --staged`.
+   write the style in `.editorconfig`, keep only the exclusions in the
+   `bunfig.toml` `[fmt]` section, set the `format` script in `package.json` to
+   `bun fmt`, replace the old formatting rules in the root `AGENTS.md`, add the
+   `formatter` block (bun fmt on agent saves) to `opencode.json`, and add the
+   optional `.githooks/pre-commit` hook that formats staged files with
+   `bun fmt --staged`.
 
 5. Restart OpenCode, then report how to use the skill and how to refresh the
    indexes after each Bun release with the `--check` flag for CI.

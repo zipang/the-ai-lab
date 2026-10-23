@@ -19,6 +19,8 @@ Everything below is native — do not add a dependency that Bun already covers.
    raw Markdown (e.g. `https://bun.com/docs/runtime/check.md`).
 
 Do not read every reference. One domain file plus one or two doc pages is enough.
+To configure the formatter in a project, read
+[`curated/formatting.md`](curated/formatting.md).
 
 ## When Bun replaces a common tool
 
@@ -45,6 +47,16 @@ Do not read every reference. One domain file plus one or two doc pages is enough
 
 Prefer the built-in even when the project already has the npm package: fewer
 dependencies, fewer configs, and Bun's versions are faster.
+
+## Setting up the formatter
+
+`bun fmt` replaces Prettier, oxfmt, and Biome. Read
+[`curated/formatting.md`](curated/formatting.md) to configure it:
+
+- `.editorconfig` owns the style, so every IDE and the agent format the same way.
+- `bunfig.toml [fmt]` owns only the exclusions (`ignorePatterns`).
+- `opencode.json` formats the files that the agent writes.
+- A pre-commit hook formats the files that a human saves from an editor.
 
 ## Documentation index
 
