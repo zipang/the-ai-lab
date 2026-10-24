@@ -77,18 +77,7 @@ Apply these steps in the target project:
 
    Run `bun fmt --check` in CI.
 
-4. Update the formatting instructions in the root `AGENTS.md`. Replace the text
-   that names Prettier or oxfmt with these rules:
-
-   ```md
-   - Format with `bun fmt`. The style lives in `.editorconfig`. Generated trees
-     are excluded in `bunfig.toml`. The formatter runs on save.
-   - Do not add a formatter package or a formatter config file.
-   ```
-
-   The managed "Bun tooling" block below already points to `bun fmt`.
-
-5. Add the `formatter` block to `opencode.json`. This block formats every file
+4. Add the `formatter` block to `opencode.json`. This block formats every file
    that the agent `write`, `edit`, or `patch` tools change, and disables the
    Prettier, oxfmt, and Biome built-ins:
 
@@ -124,7 +113,7 @@ Apply these steps in the target project:
    }
    ```
 
-6. Optional: format the files that a human saves from an editor. Add a
+5. Optional: format the files that a human saves from an editor. Add a
    pre-commit hook and commit it:
 
    ```bash
@@ -134,8 +123,31 @@ Apply these steps in the target project:
    git config core.hooksPath .githooks
    ```
 
-The hook stops a commit when `bun fmt` exits with an error, for example on a
-syntax error in a staged file.
+   The hook stops a commit when `bun fmt` exits with an error, for example on a
+   syntax error in a staged file.
+
+6. Audit and rewrite the existing instructions. The managed "Bun tooling" block
+   is a pointer. It does not cancel the old rules, so read every `AGENTS.md`
+   and `README.md` from the root down and delete what the new setup makes
+   obsolete:
+
+   - each instruction that names a removed formatter (Prettier, oxfmt, Biome),
+     its config file, or its command;
+   - each format step in a checklist, a script, or the commit procedure,
+     because the agent formats on save and the hook formats the staged files;
+   - each Bun usage list that repeats the routing table of the skill.
+
+   Keep the lint commands and the rules that are specific to the project.
+   Replace the deleted text with these rules:
+
+   ```md
+   - Format with `bun fmt`. The style lives in `.editorconfig`. The formatter
+     runs on agent saves and in the pre-commit hook. Do not run it by hand.
+   - Do not add a formatter package or a formatter config file.
+   ```
+
+   Then fix each script that chains the formatter with the linter, such as
+   `code:fix`. Keep the lint part and rename the script after its task.
 
 The formatter keeps Markdown prose as the author wrote it. `proseWrap`
 defaults to `"preserve"`. Read the curated guide for the known limits.

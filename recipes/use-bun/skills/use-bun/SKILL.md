@@ -57,6 +57,8 @@ dependencies, fewer configs, and Bun's versions are faster.
 - `bunfig.toml [fmt]` owns only the exclusions (`ignorePatterns`).
 - `opencode.json` formats the files that the agent writes.
 - A pre-commit hook formats the files that a human saves from an editor.
+- The existing `AGENTS.md` and `README.md` instructions need a rewrite: the old
+  format commands stay binding until you delete them.
 
 ## Documentation index
 

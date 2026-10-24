@@ -165,12 +165,19 @@ then:
 4. Apply the formatter configuration from the recipe README's Usage section:
    write the style in `.editorconfig`, keep only the exclusions in the
    `bunfig.toml` `[fmt]` section, set the `format` script in `package.json` to
-   `bun fmt`, replace the old formatting rules in the root `AGENTS.md`, add the
-   `formatter` block (bun fmt on agent saves) to `opencode.json`, and add the
-   optional `.githooks/pre-commit` hook that formats staged files with
-   `bun fmt --staged`.
+   `bun fmt`, add the `formatter` block (bun fmt on agent saves) to
+   `opencode.json`, and add the optional `.githooks/pre-commit` hook that
+   formats staged files with `bun fmt --staged`.
 
-5. Restart OpenCode, then report how to use the skill and how to refresh the
+5. Rewrite the existing instructions. The managed "Bun tooling" block is a
+   pointer and does not cancel the old rules. Read every `AGENTS.md` and
+   `README.md` from the root down, then delete each instruction that names a
+   removed formatter or its config file, each manual format step in a
+   checklist or a script, and each Bun usage list that repeats the skill
+   routing table. Keep the lint commands and the project rules. Fix each
+   script that chains the formatter with the linter.
+
+6. Restart OpenCode, then report how to use the skill and how to refresh the
    indexes after each Bun release with the `--check` flag for CI.
 ```
 
